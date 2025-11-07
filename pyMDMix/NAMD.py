@@ -546,14 +546,14 @@ class NAMDCheck(object):
             vol *= 0.77
         return vol
 
-import Biskit.test as BT
+from . import biskit_compat as BT
 
 class Test(BT.BiskitTest):
     """Test"""
 
     def test_NAMDWriter(self):
         """Create new replica and write MDinput"""
-        from MDSettings from . import MDSettings
+        from .MDSettings import MDSettings
         from .Systems import SolvatedSystem
         
         top = osp.join(T.testRoot('pep', 'pep.prmtop'))

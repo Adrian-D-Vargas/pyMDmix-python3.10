@@ -451,8 +451,8 @@ class AmberCreateSystem(object):
         :arg str unitname: Unitname to assign to the unit created with leap. Default: 'sys'
         :arg list extraff: Extra forcefield parameters or modifications to be loaded in tLeap for correct recognition of non-standard residues.
         """
-        import Biskit as bi
-        from AutoPrepare from . import AmberPDBCleaner
+        from . import biskit_compat as bi
+        from .AutoPrepare import AmberPDBCleaner
         
         if isinstance(inpdb, str) and osp.exists(inpdb):
             inpdb = bi.PDBModel(inpdb)
@@ -731,7 +731,7 @@ class AmberWriter(object):
 
 
 #    def __replicaatoms(self, replica):
-#        import Biskit as bi
+#        from . import biskit_compat as bi
 #        return len(bi.PDBModel(osp.join(replica.path, replica.pdb)))
 
     def getCommand(self, process, step=False, replica=None):
@@ -1185,7 +1185,7 @@ class AmberWriter(object):
 
         return command
 
-import Biskit.test as BT
+from . import biskit_compat as BT
 
 class Test(BT.BiskitTest):
     """Test"""

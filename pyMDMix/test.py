@@ -29,7 +29,7 @@ Inherited functions are modified to make testing work on pyMDMix tree structure.
 All rights to Raik.
 """
 
-from Biskit.test import *
+from .biskit_compat import BiskitTest, localTest, FUTURE
 import pyMDMix.tools as T
 import os.path as osp
 

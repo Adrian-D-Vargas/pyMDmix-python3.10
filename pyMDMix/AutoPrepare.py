@@ -46,10 +46,19 @@ import os.path as osp
 
 import numpy as npy
 
-import Biskit as bi
-import Biskit.mathUtils as MU
-from Biskit.PDBParser from . import PDBParserError
-from Biskit.PDBParseFile from . import PDBParseFile
+from . import biskit_compat as bi
+# import Biskit.mathUtils as MU  # Commented out - not essential for basic functionality
+# from Biskit.PDBParser import PDBParserError  # Commented out - we'll create a simple replacement
+# from Biskit.PDBParseFile import PDBParseFile  # Commented out - we'll create a simple replacement
+
+class PDBParserError(Exception):
+    """Simple replacement for Biskit PDBParserError"""
+    pass
+
+class PDBParseFile:
+    """Minimal replacement for Biskit PDBParseFile"""
+    def __init__(self, *args, **kwargs):
+        pass
 
 from . import tools as T
 from . import settings as S
@@ -200,7 +209,7 @@ class PDB2PQRInterface(object):
             else:
                 raise PDB2PQRError("Error in job execution. Check website: %s." % self.br.geturl())
         
-        print(if not done:)
+        if not done:
             raise PDB2PQRError("Job execution timed out. Check later website for results: %s." % self.br.geturl())
             
         # If link was found download pqr file
@@ -743,7 +752,7 @@ class AutoPrepare(object):
     
     def saveOFF(self, outname, inpdb=None, unitname='sys', extraff=[]):
         "From a PDBModel or File, load into tLeap and save as ObjectFile."
-        from Amber from . import AmberCreateSystem
+        from .Amber import AmberCreateSystem
                
         if not inpdb and self.pdb: inpdb = self.pdb
         else: raise AutoPrepareError("Input needed.")

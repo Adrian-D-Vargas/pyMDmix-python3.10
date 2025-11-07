@@ -711,7 +711,7 @@ def getSolvent(name):
     return M.getSolvent(name)
 
 ###TESTING
-import Biskit.test as BT
+from . import biskit_compat as BT
 
 class Test(BT.BiskitTest):
     """Test"""

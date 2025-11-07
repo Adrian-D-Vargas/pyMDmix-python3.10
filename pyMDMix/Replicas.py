@@ -138,7 +138,7 @@ class Replica(object):
             # ADOPT ATTRIBUTES FROM MDSETTINGS
             # If not defined in kwargs
             if not mdsettings:
-                from MDSettings from . import MDSettings
+                from .MDSettings import MDSettings
                 mdsettings = MDSettings(**kwargs)
                 
             for k,v in mdsettings.__dict__.items():
@@ -262,7 +262,7 @@ Solvent: {solvent}
 
     def asMDSettings(self):
         "Return MDSettings object with settings for current replica"
-        from MDSettings from . import MDSettings
+        from .MDSettings import MDSettings
         d = self.__dict__.copy()
         [d.pop(i) for i in ('log', 'top', 'crd', 'pdb','ref','path','attached',
                         'extension','replFilePath','system','restrPdb','create',
@@ -298,13 +298,13 @@ Solvent: {solvent}
         "Get MD checker according to the simulation program used"
         # Set checker according to mdProgram
         if self.mdProgram == 'AMBER':
-            from Amber from . import AmberCheck
+            from .Amber import AmberCheck
             return AmberCheck(self, **kwargs)
         if self.mdProgram == 'OPENMM':
-            from OpenMM from . import OpenMMCheck
+            from .OpenMM import OpenMMCheck
             return OpenMMCheck(self, **kwargs)
         elif self.mdProgram == 'NAMD':
-            from NAMD from . import NAMDCheck
+            from .NAMD import NAMDCheck
             return NAMDCheck(self, **kwargs)
 
     def getSolvent(self):
@@ -330,7 +330,7 @@ Solvent: {solvent}
 
         :return: :class:`Trajectory.Trajectory` object
         """
-        from Trajectory from . import Trajectory
+        from .Trajectory import Trajectory
         
         if not stepselection: stepselection = range(1, self.ntrajfiles+1)
         else: self.log.info("Trajectory selected steps: %s"%stepselection)
@@ -591,11 +591,11 @@ Solvent: {solvent}
         # Check folder was created and select appropriate writer
         if not self.__folderscreated: self.createFolder()
         if self.mdProgram == 'AMBER':
-            from Amber from . import AmberWriter as writer
+            from .Amber import AmberWriter as writer
         elif self.mdProgram == 'NAMD':
-            from NAMD from . import NAMDWriter as writer
+            from .NAMD import NAMDWriter as writer
         elif self.mdProgram == 'OPENMM':
-            from OpenMM from . import OpenMMWriter as writer
+            from .OpenMM import OpenMMWriter as writer
 
         else:
             raise ReplicaError("MD Program not recognized: %s" % self.mdprog)
@@ -869,7 +869,7 @@ Solvent: {solvent}
 
     def runAlignment(self, ncpus=1, steps=[], waitend=True, **kwargs):
         if kwargs.get('run') and not self.isProductionFinished(steps): raise ReplicaError("Cannot align replica because production stage is not completed.")
-        from Align from . import Align
+        from .Align import Align
         Align(self, steps=steps, nthreads=ncpus, waitend=waitend, **kwargs)     
     def runcppDensity(self, ncpus, waitend=True, **kwargs):
         if kwargs.get('run') and not self.isAligned(): raise ReplicaError("Cannot calculate density because alignment is not completed.")
@@ -882,7 +882,7 @@ Solvent: {solvent}
         cppDensity(self, nthreads=ncpus, waitend=waitend,  griddimensions = dimensions, gridorigin=origin,**kwargs)
     def calcEnergy(self, **kwargs):
         "Convert density to energies. Give in ``\*\*kwargs`` all parameters to :meth:`Energy.EnergyConversion.convert`."
-        from Energy from . import EnergyConversion
+        from .Energy import EnergyConversion
         econv = EnergyConversion()
         econv.convert(self, **kwargs)
 
@@ -940,7 +940,7 @@ def loadReplica(replicafile=None):
     return Replica(fromfile=replicafile)
 
 
-import Biskit.test as BT
+from . import biskit_compat as BT
 
 class Test(BT.BiskitTest):
     """Test"""

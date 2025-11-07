@@ -105,13 +105,13 @@ class Setting(object):
         try:
             if not self.value is None:
                 if vtype == list and isinstance(self.value, str):
-                    self.value = map(string.strip, self.value.split(','))
+                    self.value = [s.strip() for s in self.value.split(',')]
                 else:
                     self.value = vtype( self.value )
             self.vtype = vtype
         except ValueError as e:
-            raise InvalidValue('%s: cannot convert "%s" to %r.' % \)
-              (self.name,self.value,vtype)
+            raise InvalidValue('%s: cannot convert "%s" to %r.' % 
+              (self.name,self.value,vtype))
 
     def __repr__( self, tab='' ):
         error = ''
@@ -211,8 +211,8 @@ class SettingsParser(object):
                     raise TypeError('%s is not a valid type' % s)
 
             except Exception as e:
-                raise TypeError('Cannot extract type from %s: %r')\
-                      % option, e
+                raise TypeError('Cannot extract type from %s: %r' %
+                      (option, e))
 
         return t, o
 
@@ -304,8 +304,8 @@ class SettingsParser(object):
                 else: self.result.update(res)
 
         except configparser.Error as e:
-            raise InvalidFile('Error parsing settings file %s: ' % \)
-                  self.f_ini + str(e)
+            raise InvalidFile('Error parsing settings file %s: ' % 
+                  (self.f_ini + str(e)))
 
         return self.result
 
@@ -424,7 +424,7 @@ class SettingsManager(object):
 
             next = cfg_user.get( name, default )
 
-            if next.error > default.error:
+            if (next.error or 0) > (default.error or 0):
 
                 if self.verbose: self.log.warning(\
                     'User setting %s is reset to default (%r),\n\treason: %s'\
@@ -545,7 +545,7 @@ class SettingsManager(object):
         else: ns.update(d)
 
 
-import Biskit.test as BT
+from . import biskit_compat as BT
 
 class Test(BT.BiskitTest):
     """Test"""

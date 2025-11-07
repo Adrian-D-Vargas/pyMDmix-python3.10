@@ -580,14 +580,14 @@ class OpenMMCheck(object):
         return vol
 
     
-import Biskit.test as BT
+from . import biskit_compat as BT
 
 class Test(BT.BiskitTest):
     """Test"""
 
     def test_OpenMMWriter(self):
         """Create new replica and write MDinput"""
-        from MDSettings from . import MDSettings
+        from .MDSettings import MDSettings
         from .Systems import SolvatedSystem
         
         top = osp.join(T.testRoot('pep', 'pep.prmtop'))

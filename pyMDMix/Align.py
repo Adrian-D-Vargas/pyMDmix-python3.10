@@ -162,7 +162,7 @@ class Align(object):
 
         :arg list steps: list of steps to write input for. Should be a list of integers.
         """
-        from Amber from . import AmberWriter
+        from .Amber import AmberWriter
         outrmsd = False
         outpdbavg = False
         

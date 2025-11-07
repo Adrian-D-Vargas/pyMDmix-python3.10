@@ -118,7 +118,7 @@ class System(object):
         return s
 
     def __add__(self, other):
-        from MDSettings from . import MDSettings
+        from .MDSettings import MDSettings
         from .Replicas import Replica
 
         if isinstance(other, MDSettings): other = [other]
@@ -144,7 +144,7 @@ class System(object):
 
     def __initCreate(self):
         if not self.create:
-            from Amber from . import AmberCreateSystem
+            from .Amber import AmberCreateSystem
             self.create = AmberCreateSystem(FFlist=self.FF, informative=False)
             if self.amberOFF:
                 tmpoff = self.amberOFF.writeTmp()
@@ -192,7 +192,7 @@ class System(object):
         :arg str amberOFF: Path to amber object file.
         :arg str unitname: Name of the unit we should use in the future. If not given, automatically take the first unit found in the file.
         """
-        from OFFManager from . import OFFManager
+        from .OFFManager import OFFManager
         
         # Special case: test
         # Grab off from testing directory
@@ -259,7 +259,7 @@ class System(object):
         """
         Create reference pdb and store it in self.ref
         """
-        import Biskit as bi
+        from . import biskit_compat as bi
         # Initiate AmberCreateSystem with loaded AmberOFF
         self.__initCreate()
         self.create.saveAmberParm(self.unitName, 'tmp.top', 'tmp.crd')
@@ -333,7 +333,7 @@ class SolvatedSystem(System):
         return "%s SolvatedSystem"%self.name
 
     def __add__(self, other):
-        from MDSettings from . import MDSettings
+        from .MDSettings import MDSettings
         from .Replicas import Replica
         
         if isinstance(other, MDSettings): other = [other]
@@ -434,7 +434,7 @@ class SolvatedSystem(System):
     def setPDBfromTOPCRD(self):
         "Save a PDB file from the TOP and CRD files in attributes."
         import time
-        from Amber from . import AmberCreateSystem
+        from .Amber import AmberCreateSystem
 
         self.getTmpTopCrdFiles()
         self.tmp_pdb = tmp = T.tempfile.mktemp()+'.pdb'
@@ -478,7 +478,7 @@ def parseSystemConfigFile(projectConfigFile):
     return sys
 
 
-import Biskit.test as BT
+from . import biskit_compat as BT
 
 class Test(BT.BiskitTest):
     """Test"""

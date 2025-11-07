@@ -37,16 +37,19 @@ import sys, os
 import os.path as osp
 import logging
 
-# Disable Biskit Loading warning
-DISABLE_BISKIT_LOADING_WARNS = True
-if DISABLE_BISKIT_LOADING_WARNS:
-    olderr = sys.stderr
-    sys.stderr = open(os.devnull, 'wb')
+# Use compatibility module instead of Biskit
+try:
+    # Try to import Biskit if available
     import Biskit.tools
-    sys.stderr.close()
-    sys.stderr = olderr
-
-from Biskit.tools import *
+    from Biskit.tools import *
+except ImportError:
+    # If Biskit is not available, use our compatibility module
+    from . import biskit_compat
+    # Import common functions from compatibility module
+    from .biskit_compat import (
+        ToolsError, LogFormatter, absfile, stripFilename, 
+        toList, tryRemove, tempDir, traceback_plus
+    )
 
 class InvalidPath( ToolsError ):
     pass
@@ -243,7 +246,7 @@ BROWSER = Browser.Browser()
 
 ##### CONSTRUCT EXECUTOR
 from . import Executor
-EXECUTOR = Executor()
+EXECUTOR = Executor.Executor()
 
 ##### LOGGING TOOLS
 class LogFormatter(logging.Formatter):

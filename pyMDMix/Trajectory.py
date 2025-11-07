@@ -31,7 +31,7 @@ __date__ ="$16-ene-2014 17:09:33$"
 
 import os.path as osp
 from . import settings as S
-import Biskit as bi
+from . import biskit_compat as bi
 
 
 class TrajFileError(Exception):
@@ -69,7 +69,7 @@ class TrajFile(object):
             except ImportError:
                 raise TrajFileError("Can't read NetCDF trajectory")
         elif self.extension in ('dcd',):
-            from NamdDCDParser from . import NamdDCDParser
+            from .NamdDCDParser import NamdDCDParser
             self.traj = NamdDCDParser(self.fname, self.pdb, box=1)
             self.nextFunction = self.traj.read_dcdstep
 
@@ -131,7 +131,7 @@ class Trajectory(object):
             raise StopIteration()
 
 
-import Biskit.test as BT
+from . import biskit_compat as BT
 from . import tools as T
 
 class Test(BT.BiskitTest):

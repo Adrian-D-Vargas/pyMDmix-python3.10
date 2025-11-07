@@ -460,7 +460,7 @@ class HotSpotSet(object):
             HotSpot which is closer to the atomnumber
             FALSE if distance exceeds maxdist
         """
-        import Biskit as bi
+        from . import biskit_compat as bi
         if not isinstance(pdb, bi.PDBModel):
             raise AttributeError("pdb argument should be a Biskit.PDBModel instance")
 
@@ -946,7 +946,7 @@ class HotSpotsManager(object):
             or
             indicesMask     (npy.ndarray of bools)  Mask for the PDBModel
         """
-        import Biskit as bi
+        from . import biskit_compat as bi
         import scipy
         if scipy.__version__ > "0.11.0":
             from scipy.spatial import KDTree as KDTree

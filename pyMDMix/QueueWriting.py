@@ -109,13 +109,13 @@ class QueueInputWriter(object):
 
         # Get writter
         if replica.mdProgram == 'AMBER':
-            from Amber from . import AmberWriter
+            from .Amber import AmberWriter
             writer = AmberWriter(replica)
         elif replica.mdProgram == 'NAMD':
-            from NAMD from . import NAMDWriter
+            from .NAMD import NAMDWriter
             writer = NAMDWriter(replica)
         elif replica.mdProgram == 'OPENMM':
-            from OpenMM from . import OpenMMWriter
+            from .OpenMM import OpenMMWriter
             writer = OpenMMWriter(replica)
         else:
             raise QueueInputError("Replica has unknown mdProgram attribute: %s" % replica.mdProgram)

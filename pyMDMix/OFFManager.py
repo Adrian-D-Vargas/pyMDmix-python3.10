@@ -326,7 +326,7 @@ class OFFManager(object):
         if self.tmpfile:
             return T.tryRemove(self.tmpfile)
 
-import Biskit.test as BT
+from . import biskit_compat as BT
 from . import tools as T
 
 class Test(BT.BiskitTest):

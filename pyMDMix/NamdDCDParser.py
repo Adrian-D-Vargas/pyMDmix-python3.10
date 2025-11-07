@@ -31,9 +31,8 @@ import sys
 import struct
 
 import numpy as npy
-import Biskit.tools as T
-from Biskit.PDBModel from . import PDBModel
-from Biskit.LogFile import StdLog
+from . import tools as T
+from .biskit_compat import PDBModel, StdLog
 
 class NamdDCDParser:
     

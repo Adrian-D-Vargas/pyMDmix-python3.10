@@ -207,7 +207,7 @@ def parseSettingsConfigFile(settingsConfigFile, noSolvent=False):
     :return: List of :class:`~Replicas.Replica` objects constructed with all parameters in the RCF
     """
     import os.path as osp
-    from Parsers from . import MDSettingsConfigFileParser
+    from .Parsers import MDSettingsConfigFileParser
     
     if not osp.exists(settingsConfigFile): raise BadFile("File %s not found." % settingsConfigFile)
     if noSolvent: sets = MDSettingsConfigFileParser().parseNoSolvent(settingsConfigFile)

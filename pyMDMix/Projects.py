@@ -34,7 +34,7 @@ import os.path as osp
 import logging
 
 from . import Systems
-from MDSettings from . import MDSettings
+from .MDSettings import MDSettings
 from . import settings as S
 from . import tools as T
 from .Replicas import Replica
@@ -545,7 +545,7 @@ def returnMDMixProjectOrFail(parserargs):
 
 
 ###TESTING
-import Biskit.test as BT
+from . import biskit_compat as BT
 
 class Test(BT.BiskitTest):
     """Test"""
