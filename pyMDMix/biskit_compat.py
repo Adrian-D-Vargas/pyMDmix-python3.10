@@ -177,3 +177,14 @@ class StdLog:
 class FUTURE:
     """Tag for future tests"""
     pass
+
+# Test loader compatibility
+class BiskitTestLoader:
+    """Minimal test loader to replace Biskit.BiskitTestLoader"""
+    
+    def __init__(self):
+        pass
+    
+    def addTestsFromModules(self, modules):
+        """Add tests from modules - placeholder"""
+        pass

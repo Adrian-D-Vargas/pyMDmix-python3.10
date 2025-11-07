@@ -177,9 +177,9 @@ except ImportError:
 
 
 ## CREATE A GLOBAL BROWSER ALL CLASSES CAN ACCESS
-from Browser import Browser
+from . import Browser
 global BROWSER
-BROWSER = Browser()
+BROWSER = Browser.Browser()
 
 if DEBUG==1:
     import atexit
@@ -216,7 +216,7 @@ def setLogger(level=None, logFile=None):
 ######################
 ## clean up name space
 
-del T, user
+del T
 del __CFG_DEFAULT, __CFG_USER, m
 del __defff, __ffok, root, dirs, files
 del rootlog, os, osp, logging, testparam, Browser

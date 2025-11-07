@@ -141,7 +141,7 @@ class MDSettings(object):
                 # to give some flexibility to the user (specially for case matching
                 bestmatch = difflib.get_close_matches(k, settingKeys, 1, 0.8)
                 if bestmatch: setattr(self, bestmatch[0], v)
-                else: print(>> sys.stderr, "Attribute %s not in md-settings. skipping..."%k)
+                else: print("Attribute %s not in md-settings. skipping..."%k, file=sys.stderr)
         m.updateNamespace(self.__dict__, keepdefined=True)
 
         # Set name (automatic name if not given)
