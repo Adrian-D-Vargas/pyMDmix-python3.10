@@ -33,12 +33,12 @@ import os
 import os.path as osp
 import logging
 
-import Systems
-from MDSettings import MDSettings
-import settings as S
-import tools as T
-from Replicas import Replica
-from Structures import FileLock
+from . import Systems
+from MDSettings from . import MDSettings
+from . import settings as S
+from . import tools as T
+from .Replicas import Replica
+from .Structures import FileLock
 
 
 class ProjectError(Exception):
@@ -72,7 +72,7 @@ class Project(object):
                 self.fetchReplicas()
                 if _updated: self.updateReplicaPaths()
             else:
-                raise BadFile("Project File %s not found")%fromfile
+                raise BadFile("Project File %s not found" % fromfile)
         else:
             import collections
             
@@ -206,7 +206,7 @@ class Project(object):
                 continue
                 
             try: meth = getattr(r, action)
-            except: raise ProjectError("Replica do not have method with name %s")%action
+            except: raise ProjectError("Replica do not have method with name %s" % action)
             
             import multiprocessing as multi
             self.log.debug("Submitting replica %s action %s"%(r.name, action))
@@ -233,12 +233,12 @@ class Project(object):
         :arg list setttings: List of :class:`MDSettings` objects.
         """
         if not self.__folderscreated: raise ProjectError("Can not create Replicas if Project folder is not created")
-        if not systemname in self.systems.keys(): raise BadAttribute("System name %s not found in current project")%systemname
+        if not systemname in self.systems.keys(): raise BadAttribute("System name %s not found in current project" % systemname)
         if not isinstance(settings, list): settings = [settings]
 
         # Check types
         for sets in settings:
-            if not isinstance(sets, MDSettings): raise BadAttribute("Expected MDSettings type, but %s given")%(type(sets))
+            if not isinstance(sets, MDSettings): raise BadAttribute("Expected MDSettings type, but %s given" % (type(sets)))
 
         # Build replicas and add names
         T.BROWSER.goHome()
@@ -324,7 +324,7 @@ class Project(object):
             
         # Check expected project file exists inside *path*
         if not osp.exists(osp.join(path, self.projFileName)):
-            raise ProjectError("Trying to set project path to folder %s that does not contain expected project file %s")%(path, self.projFileName)
+            raise ProjectError("Trying to set project path to folder %s that does not contain expected project file %s" % (path, self.projFileName))
 
         self.projectPath = path
         self.projFilePath = osp.join(self.projectPath, self.projFileName)
@@ -404,7 +404,7 @@ class Project(object):
         if not isinstance(replicalist, list): replicalist = [replicalist]
         for r in replicalist:
             if isinstance(r, str): r = self.getReplica(r)
-            if not isinstance(r, Replica): raise BadAttribute("Expected argument of type Replica, not %s")%(type(r))
+            if not isinstance(r, Replica): raise BadAttribute("Expected argument of type Replica, not %s" % (type(r)))
             self.log.info("Extending replica %s simulation %i nanoseconds to %s"%(r.name, nanos, r.nanos+nanos))
             r.setNanos(r.nanos+nanos)
             r.createMDInput()
@@ -466,7 +466,7 @@ class Project(object):
 #            - other configuration options desrcibing imported replica (restrMode, mdProgram, etc. see :class:`~Replicas.Replica`)
 #
 #        """
-#        from Replicas import Replica
+#        from .Replicas import Replica
 #        r = Replica(name=name, solvent=solvent)
 #        self.addNewReplica(r)
 #        T.BROWSER.goMD()
@@ -496,9 +496,9 @@ def createProject(projectConfigFile, name):
     :arg str projectConfigFile: path to config file containing SYSTEM and MDSETTINGS sections
     :arg str name: Name to project to be created
     """
-    from Systems import parseSystemConfigFile
-    from MDSettings import parseSettingsConfigFile
-    if not osp.exists(projectConfigFile): raise BadFile("File %s not found.")%projectConfigFile
+    from .Systems import parseSystemConfigFile
+    from .MDSettings import parseSettingsConfigFile
+    if not osp.exists(projectConfigFile): raise BadFile("File %s not found." % projectConfigFile)
     print("Parsing System information...")
     sys = parseSystemConfigFile(projectConfigFile)
     print("Parsing md settings for replica creation...")

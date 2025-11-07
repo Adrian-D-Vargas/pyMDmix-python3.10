@@ -49,7 +49,7 @@ __author__="dalvarez"
 __date__ ="$17-ene-2014 1:07:04$"
 
 import os.path as osp
-from containers import Residue, Atom
+from .containers import Residue, Atom
 
 class OFFManagerError(Exception):
     pass
@@ -79,7 +79,7 @@ class OFFManager(object):
         
         if offFile:
             if osp.exists(offFile): self.off = open(offFile, 'r').read()
-            else: raise OFFManagerError("Object File %s not found")%offFile
+            else: raise OFFManagerError("Object File %s not found" % offFile)
         elif offString:
             self.off = offString
         else:
@@ -258,7 +258,7 @@ class OFFManager(object):
         line = off.next()
         while line and not search in line:
             line = off.next()
-        if not line: raise OFFSectionError("Section %s for unit %s not in file.")%(section, unit)
+        if not line: raise OFFSectionError("Section %s for unit %s not in file." % (section, unit))
 
         out = []
         if with_header: out.append(line)
@@ -322,12 +322,12 @@ class OFFManager(object):
         """
         Remove temporary file if created with :meth:`writeTmp`
         """
-        import tools as T
+        from . import tools as T
         if self.tmpfile:
             return T.tryRemove(self.tmpfile)
 
 import Biskit.test as BT
-import tools as T
+from . import tools as T
 
 class Test(BT.BiskitTest):
     """Test"""

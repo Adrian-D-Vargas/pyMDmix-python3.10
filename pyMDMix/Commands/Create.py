@@ -28,7 +28,7 @@ class Create(Command):
                     print("DONE")
                     #########
                 else:
-                    raise MDMixError("File %s not found. Cannot create the project.")%parserargs.file
+                    raise MDMixError("File %s not found. Cannot create the project." % parserargs.file)
             else:
                 # CREATE empty project
                 p = pyMDMix.Project(name=parserargs.projname)
@@ -54,7 +54,7 @@ class Create(Command):
             #Checking mandatory file option is given and exists
             if not parserargs.file:raise MDMixError("Missing file in solvents create action. -f FILE is mandatory in this option.")
             file = parserargs.file
-            if not os.path.exists(file): raise MDMixError("File not found: %s")%file
+            if not os.path.exists(file): raise MDMixError("File not found: %s" % file)
             man = pyMDMix.Solvents.SolventManager()
             solv = man.createSolvent(file)
             man.saveSolvent(solv)

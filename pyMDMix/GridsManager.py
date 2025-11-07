@@ -35,8 +35,8 @@ import copy
 import numpy as npy
 import logging
 
-import settings as S
-import GridData 
+from . import settings as S
+from . import GridData 
 
 class GridError(Exception):
     pass
@@ -78,7 +78,7 @@ class Grid(GridData.GridData):
             self.type = type
             self.setHeader(info=info)
         else:
-            raise TypeError("%s type not valid. Valid types are: %s")%(type, S.GRIDTYPES)
+            raise TypeError("%s type not valid. Valid types are: %s" % (type, S.GRIDTYPES))
 
     def getPercentileCutValue(self, percentile, maskout=False):
         """
@@ -284,7 +284,7 @@ class GridSpace(object):
                 if k: [dims.append(i) for i in k]
                 else:
                     self.log.error("(reduce) Invalid probe name: %s"%p)
-                    raise ProbeError("Invalid probe name: %s")%p
+                    raise ProbeError("Invalid probe name: %s" % p)
             dims = tuple(npy.unique(dims).tolist())
             gspace = self.gspace[:,:,:,dims]
             ndims = gspace.shape[-1]+1
@@ -482,7 +482,7 @@ class GridSpace(object):
                 ndim = [self.probeMapping.get(n) for n in name]
 #                print(name, ndim)
             if npy.any([el == None for el in ndim]):
-                raise ValueError("%s name not in GridSpace mapping dict")%name
+                raise ValueError("%s name not in GridSpace mapping dict" % name)
         elif cross:
             ndim = False
         else:
@@ -731,7 +731,7 @@ def getEnergyFromTxtCoords(grid, txtfile, radius=0, temp=300.):
     Using a txt file for defining coordinates and radius to extract energies from grid *grid*.
     """
     if osp.exists(txtfile): txt = open(txtfile, 'r').readlines()
-    else: raise BadFile("File name %s not found.")%txtfile
+    else: raise BadFile("File name %s not found." % txtfile)
 
     # Collect coordinates and radius
     coords = []
@@ -747,7 +747,7 @@ def getEnergyFromTxtCoords(grid, txtfile, radius=0, temp=300.):
             coords.append([x,y,z])
             rads.append(r)
         else:
-            raise BadFile("File %s contains lines with wrong format. Expected 3 or 4 elements per line.")%txtfile
+            raise BadFile("File %s contains lines with wrong format. Expected 3 or 4 elements per line." % txtfile)
 
     # Fetch results
     return getEnergyValues(grid, coords, rads, temp=temp)
@@ -761,7 +761,7 @@ def getEnergyFromPDBCoords(grid, pdbfile, forceradius=0, temp=300.):
     """
     import Biskit as bi
     if osp.exists(pdbfile): pdb = bi.PDBModel(pdbfile)
-    else: raise BadFile("File name %s not found.")%pdbfile
+    else: raise BadFile("File name %s not found." % pdbfile)
 
     # Collect coordinates and radius
     coords = pdb.xyz
@@ -886,7 +886,7 @@ def similarity(gridList, percentile=0.02, hardcutoff=False, comparepositive=Fals
     """
     import itertools
     
-    if not isinstance(gridList, list): raise AttributeError("Expected gridList of type list. Got %s instead.")%(type(gridList))
+    if not isinstance(gridList, list): raise AttributeError("Expected gridList of type list. Got %s instead." % (type(gridList)))
     
     # Parse each list element to check if it is a Grid instance or a file to be loaded
     grids = []
@@ -895,9 +895,9 @@ def similarity(gridList, percentile=0.02, hardcutoff=False, comparepositive=Fals
         elif isinstance(el, str):
             # Try to load as a file
             if os.path.exists(el): grids.append(Grid(el))
-            else: raise AttributeError("Element in list is not a valid file path or a Grid instance: %s")%el
+            else: raise AttributeError("Element in list is not a valid file path or a Grid instance: %s" % el)
         else:
-            raise AttributeError("Wrong list element type: %s %s")%(el, type(el))
+            raise AttributeError("Wrong list element type: %s %s" % (el, type(el)))
     
     # Trim Grids if necessary
     grids = trim(grids)

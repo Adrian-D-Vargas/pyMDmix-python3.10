@@ -102,8 +102,8 @@ class Tools(Command):
             refpdb = parserargs.refpdb
             buffer = parserargs.buff
             
-            if not os.path.exists(refpdb): raise MDMixError("PDB file %s not found")%refpdb
-            if not os.path.exists(ingrid): raise MDMixError("Grid file %s not found")%ingrid
+            if not os.path.exists(refpdb): raise MDMixError("PDB file %s not found" % refpdb)
+            if not os.path.exists(ingrid): raise MDMixError("Grid file %s not found" % ingrid)
             
             from pyMDMix.GridsManager import trim, Grid, GridData
             smallgrid = GridData.createFromPDB(refpdb, spacing=0.5, buff=buffer, takeProtein=False)

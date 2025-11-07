@@ -41,7 +41,7 @@ import logging
 import os
 import os.path as osp
 import configparser
-import tools as T
+from . import tools as T
 import string
 
 class SettingsError( Exception ):
@@ -110,7 +110,7 @@ class Setting(object):
                     self.value = vtype( self.value )
             self.vtype = vtype
         except ValueError as e:
-            raise InvalidValue('%s: cannot convert "%s" to %r.') %\
+            raise InvalidValue('%s: cannot convert "%s" to %r.' % \)
               (self.name,self.value,vtype)
 
     def __repr__( self, tab='' ):
@@ -208,7 +208,7 @@ class SettingsParser(object):
                 t = eval( s )
 
                 if not type(t) is type:
-                    raise TypeError('%s is not a valid type') % s
+                    raise TypeError('%s is not a valid type' % s)
 
             except Exception as e:
                 raise TypeError('Cannot extract type from %s: %r')\
@@ -296,7 +296,7 @@ class SettingsParser(object):
             c = CaseSensitiveConfigParser()
 
             if c.read( self.f_ini ) != [ self.f_ini ]:
-                raise IOError('Settings file %s not found.') % self.f_ini
+                raise IOError('Settings file %s not found.' % self.f_ini)
 
             for section in c.sections():
                 res = self.__processSection( c.items(section), section)
@@ -304,7 +304,7 @@ class SettingsParser(object):
                 else: self.result.update(res)
 
         except configparser.Error as e:
-            raise InvalidFile('Error parsing settings file %s: ') %\
+            raise InvalidFile('Error parsing settings file %s: ' % \)
                   self.f_ini + str(e)
 
         return self.result

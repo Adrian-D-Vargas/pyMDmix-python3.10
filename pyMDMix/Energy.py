@@ -35,10 +35,10 @@ import logging
 
 import numpy as npy
 
-import settings as S
-import tools as T
-from Replicas import Replica
-from GridsManager import Grid, GridSpace
+from . import settings as S
+from . import tools as T
+from .Replicas import Replica
+from .GridsManager import Grid, GridSpace
 
 class EnergyConversionError(Exception):
     pass
@@ -81,13 +81,13 @@ class EnergyConversion(object):
         :return: float with ratio refunit/unit
         """
         if isinstance(pdb, str):
-            from PDB import SolvatedPDB
+            from .PDB import SolvatedPDB
             pdb = SolvatedPDB(pdb)
 
         numres = pdb.getNumResidues()
         unitnum = numres.get(unit)
         refnum = numres.get(refunit)
-        if not unitnum or not refnum: raise EnergyConversionError("Unit %s or refunit %s not found in pdb %s")%(unit, refunit, pdb.source)
+        if not unitnum or not refnum: raise EnergyConversionError("Unit %s or refunit %s not found in pdb %s" % (unit, refunit, pdb.source))
         return refnum/float(unitnum)
 
     def calcReplicaExpectedValue(self, replica, probe, numsnaps=False, stepselection=[], gridspacing=S.GRID_SPACING):
@@ -105,7 +105,7 @@ class EnergyConversion(object):
         if probe in solv.comprobes.keys(): unit = solv.comprobes[probe].name
         elif probe in solv.probelist: unit = solv.getProbeByName(probe).residue.name
         else:
-            raise EnergyConvertError("Probe %s not found for solvent in replica %s")%(probe, replica.name)
+            raise EnergyConvertError("Probe %s not found for solvent in replica %s" % (probe, replica.name))
 
         # Calculate ratio-correction factor
         if len(solv.residues) > 1:
@@ -182,7 +182,7 @@ class EnergyConversion(object):
         Given a name of a probe, convert the grid to energies using probability of the probe.
         Will return a Grid instance.
         """
-        from Solvents import SolventManager as SM
+        from .Solvents import SolventManager as SM
 
         # Load grid if not already done
         if isinstance(grid, str): grid = Grid(grid)
@@ -191,7 +191,7 @@ class EnergyConversion(object):
         # Fetch probability
         sm = SM()
         solv = sm.fetchSolventByProbe(probename)
-        if not solv: raise EnergyConversionError("Probename %s not found.")%probename
+        if not solv: raise EnergyConversionError("Probename %s not found." % probename)
         prob = solv.getProbeProbability(probename)
 
         # Convert
@@ -221,7 +221,7 @@ class EnergyConversion(object):
         solvents = []
         probes = []
         for r in replicalist:
-            if not isinstance(r, Replica): raise EnergyConversionError("Wrong type %s. Expected Replica type.")%type(r)
+            if not isinstance(r, Replica): raise EnergyConversionError("Wrong type %s. Expected Replica type." % type(r))
             solvents.append(r.solvent)
             probes.extend(r.getProbes())
 
@@ -231,11 +231,11 @@ class EnergyConversion(object):
 
         # If averaging, all replicas must be of same solvent
         if len(set(solvents)) > 1 and average:
-            raise EnergyConversionError("Cannot average grids from replicas run with different solvents: %s")%replnames
+            raise EnergyConversionError("Cannot average grids from replicas run with different solvents: %s" % replnames)
 
         # Check probes
         if probelist and not set(probelist) < set(probes):
-            raise EnergyConversionError("Some selected probes are not found in replica list: %s")%list((set(probelist) - set(probes)))
+            raise EnergyConversionError("Some selected probes are not found in replica list: %s" % list((set(probelist) - set(probes))))
         if not probelist: probelist = list(set(probes))
 
         # set empty outprefix if not given

@@ -65,10 +65,9 @@ Summary for all
 import os
 import sys
 import logging
-import os
 import os.path as osp
-import tools as T
-import SettingsParser as P
+from . import tools as T
+from . import SettingsParser as P
 
 VERSION="0.1"
 
@@ -94,7 +93,7 @@ try:
     m = P.SettingsManager(__CFG_DEFAULT, __CFG_USER, createmissing=True  )
     m.updateNamespace( locals() )
 except Exception as why:
-    raise P.SettingsError, 'Error importing pyMDMix settings: %s'%why
+    raise P.SettingsError('Error importing pyMDMix settings: %s' % why)
 
 ## REPLICA DEFAULTS PATHS
 CFG_MD_DEFAULT = osp.join(T.dataRoot('defaults'),'md-settings.cfg')
@@ -103,7 +102,7 @@ try:
     m = P.SettingsManager(CFG_MD_DEFAULT, CFG_MD_USER, createmissing=True  )
     m.updateNamespace( {} )
 except Exception as why:
-    raise P.SettingsError, 'Error importing pyMDMix MD default settings: %s'%why
+    raise P.SettingsError('Error importing pyMDMix MD default settings: %s' % why)
 
 
 ##
@@ -196,7 +195,7 @@ def setLogger(level=None, logFile=None):
 
     if not level: level = 'INFO'
     if level.upper() not in LOGLEVEL.keys():
-        raise KeyError("%s level not valid. Valid names: %s")%(level.upper(),LOGLEVEL.keys())
+        raise KeyError("%s level not valid. Valid names: %s" % (level.upper(),LOGLEVEL.keys()))
 
     rootlog = logging.getLogger()
     rootlog.setLevel(level.upper())

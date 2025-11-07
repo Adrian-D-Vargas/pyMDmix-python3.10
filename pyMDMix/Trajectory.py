@@ -30,7 +30,7 @@ __author__="dalvarez"
 __date__ ="$16-ene-2014 17:09:33$"
 
 import os.path as osp
-import settings as S
+from . import settings as S
 import Biskit as bi
 
 
@@ -50,7 +50,7 @@ class TrajFile(object):
         self.frameselection = frameselection
         self.extension = osp.splitext(self.fname)[1].lstrip('.')
         if not self.extension in S.avail_trajext:
-            raise TrajFileError("Wrong extension %s. Expected extensions: %s")%(self.extension, ','.join(S.avail_trajext))
+            raise TrajFileError("Wrong extension %s. Expected extensions: %s" % (self.extension, ','.join(S.avail_trajext)))
         self.loadFile()
 
     def __iter__(self):
@@ -69,7 +69,7 @@ class TrajFile(object):
             except ImportError:
                 raise TrajFileError("Can't read NetCDF trajectory")
         elif self.extension in ('dcd',):
-            from NamdDCDParser import NamdDCDParser
+            from NamdDCDParser from . import NamdDCDParser
             self.traj = NamdDCDParser(self.fname, self.pdb, box=1)
             self.nextFunction = self.traj.read_dcdstep
 
@@ -132,7 +132,7 @@ class Trajectory(object):
 
 
 import Biskit.test as BT
-import tools as T
+from . import tools as T
 
 class Test(BT.BiskitTest):
     """Test"""

@@ -193,7 +193,7 @@ class Analyze(Command):
                 avg = parserargs.noavg
                 nanosel = self.parsenanos(parserargs)
 
-                from pyMDMix.Energy import EnergyConversion
+                from pyMDMix.Energy from . import EnergyConversion
                 econv = EnergyConversion()
                 econv.convert(replicas, probelist=probelist, average=avg, dg0correct=dg0,
                                     inprefix=inprefix, outprefix=outprefix, nsnaps=nsnaps, stepselection=nanosel)
@@ -209,7 +209,7 @@ class Analyze(Command):
                 maskcutvalue = parserargs.ignore
                 
                 for g in ingrids:
-                    if not os.path.exists(g): raise MDMixError("File %s not found.")%g
+                    if not os.path.exists(g): raise MDMixError("File %s not found." % g)
                 
                 import pyMDMix.HotSpotsManager as HM
                 if centroid: centroid = 'avg'
@@ -226,7 +226,7 @@ class Analyze(Command):
                 cutoff = parserargs.cutoff
                 
                 for g in ingrids:
-                    if not os.path.exists(g): raise MDMixError("File %s not found.")%g
+                    if not os.path.exists(g): raise MDMixError("File %s not found." % g)
                 
                 import pyMDMix.HotSpotsManager as HM
                 HM.createHotSpotsByMinSearch(ingrids, cutoff, outprefix=outprefix, meanradius=meanradius, 

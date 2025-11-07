@@ -77,8 +77,8 @@ Here is an exaple of valid configuraiton file with all available options comment
 
 Configuring and adding a new solvent into the default database::
 
-    >>> import tools as T
-    >>> from Solvents import SolventManager
+    >>> from . import tools as T
+    >>> from .Solvents import SolventManager
     >>> SM = SolventManager()
     >>>
     >>> # Read configuration and create object.
@@ -120,10 +120,10 @@ __date__ ="$16-ene-2014 17:09:33$"
 
 import os.path as osp
 import logging
-import settings as S
-import tools as T
-import OFFManager as O
-from containers import Probe
+from . import settings as S
+from . import tools as T
+from . import OFFManager as O
+from .containers import Probe
 
 
 class SolventParserError(Exception):
@@ -232,7 +232,7 @@ class Solvent(object):
             # Check all residues in the mapping are present in the solvent box
             resnames = set(d.keys())
             if not resnames <= set(map(lambda x: x.name, self.residues)): # all resnames should be present in the off
-                raise MappingError("In PROBES section, mapping to unkown residues: %s")%(resnames - self.residues)
+                raise MappingError("In PROBES section, mapping to unkown residues: %s" % (resnames - self.residues))
 
             # Check all atoms are present in each residue
             # TODO keep loop structure for multiple residues although
@@ -242,7 +242,7 @@ class Solvent(object):
                 atoms = set(d[res])
                 if not atoms <= resatoms:
                     raise MappingError("In PROBES section, probe %s is mapping \
-                                        to unkown atom names for residue %s: %s")%(probe, res, atoms - resatoms)
+                                        to unkown atom names for residue %s: %s" % (probe, res, atoms - resatoms))
 
             res = self.getResidue(d.keys()[0])
             atoms = d[res.name]
@@ -364,12 +364,12 @@ class Solvent(object):
         # Check self.boxunit exists
         allunits = offparser.getUnits()
         if not self.boxunit in allunits:
-            raise SolventParserError("Main box unit %s not present in object file %s!")%(self.boxunit, self.offpath)
+            raise SolventParserError("Main box unit %s not present in object file %s!" % (self.boxunit, self.offpath))
 
         self.volume = offparser.getVolume(self.boxunit)
         if not self.volume:
             raise SolventParserError("Main box unit %s does not have box information! \
-                            Are you sure this is the pre-equilibrated solvent box?")%self.boxunit
+                            Are you sure this is the pre-equilibrated solvent box?" % self.boxunit)
 
         # Now check all residues in the boxunit are also inside the object file as
         # separate units. Will save the list as a set for easy comparison.
@@ -377,7 +377,7 @@ class Solvent(object):
         if not unitresidues <= set(allunits):  # Check residues set is a subset of allunits or equal
             missingres = unitresidues - set(allunits)
             raise SolventParserError("Objectfile %s does not contain units for the residues %s present in \
-                                   main solvent box %s!")%(self.offpath, ','.join(missingres), self.boxunit)
+                                   main solvent box %s!" % (self.offpath, ','.join(missingres), self.boxunit))
         else:
             # Correct. Fecth residue instances from off
             self.residues = [offparser.getResidue(r) for r in unitresidues]
@@ -423,7 +423,7 @@ class SolventManager(object):
         :raise MissingSection: Section is not present in :attr:`dict`
         """
         sect = dict.get(name)
-        if not sect: raise MissingSection("%s section missing in Solvent Config file.")%name
+        if not sect: raise MissingSection("%s section missing in Solvent Config file." % name)
         return sect
     
     def __getOption(self, dict, name):
@@ -438,7 +438,7 @@ class SolventManager(object):
         :raises MissingOption: Option is not present in :attr:`dict
         """
         setting = dict.get(name)
-        if not setting: raise MissingOption("%s option missing in Solvent Config file.")%name
+        if not setting: raise MissingOption("%s option missing in Solvent Config file." % name)
         return setting
 
     def __todict(self, settingoption):
@@ -459,7 +459,7 @@ class SolventManager(object):
         :arg str configFile: Solvent configuration filename to read and parse.
                 It should contain all mandatory fields.
         """
-        import SettingsParser as P
+        from . import SettingsParser as P
         file = T.absfile(configFile)
         config = P.SettingsParser(file)
         result = config.parse(keepsections=True)
@@ -561,7 +561,7 @@ class SolventManager(object):
             options = self.__parseConfig(configfile)
             return Solvent(**options)
         else:
-            raise BadFile("File %s does not exist")%configfile
+            raise BadFile("File %s does not exist" % configfile)
 
     def __getDatabase(self, db=None, createEmpty=False):
         """
@@ -646,7 +646,7 @@ class SolventManager(object):
             self.log.info("Removed solvent %s from database %s"%(solvName, db))
             return True
         else:
-            raise SolventManagerError("DB %s does not contain solvent name %s")%(db, solvName)
+            raise SolventManagerError("DB %s does not contain solvent name %s" % (db, solvName))
 
     def getSolvent(self, name, db=None):
         """

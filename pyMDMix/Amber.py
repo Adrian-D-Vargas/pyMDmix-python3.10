@@ -38,9 +38,9 @@ import subprocess as sub
 
 import numpy as npy
 
-import tools as T
-import settings as S
-import Solvents
+from . import tools as T
+from . import settings as S
+from . import Solvents
 
 # ERRORS DEFINITION
 class AmberWriterError(Exception):
@@ -452,7 +452,7 @@ class AmberCreateSystem(object):
         :arg list extraff: Extra forcefield parameters or modifications to be loaded in tLeap for correct recognition of non-standard residues.
         """
         import Biskit as bi
-        from AutoPrepare import AmberPDBCleaner
+        from AutoPrepare from . import AmberPDBCleaner
         
         if isinstance(inpdb, str) and osp.exists(inpdb):
             inpdb = bi.PDBModel(inpdb)
@@ -839,7 +839,7 @@ class AmberWriter(object):
         if not replica: raise AmberWriterError("Replica not assigned.")
 
         if not (replica.top and replica.crd):
-            raise AmberWriterError("Replica %s does not have PRMTOP and PRMCRD files set.")%replica.name
+            raise AmberWriterError("Replica %s does not have PRMTOP and PRMCRD files set." % replica.name)
 
 #        S.gotoReplica(replica)
 #        self.log.info("Writing shell commands to run the MD for replica %s. Adapt it to your queue needs.\
@@ -897,7 +897,7 @@ class AmberWriter(object):
                 raise AmberWriterError("Replica System not set. Can not generate mask.")
             syspdb = replica.system.getSolvatedPDB()
             if not syspdb:
-                raise AmberWriteError("Error creating SolvatedPDB from System in replica %s")%replica.name
+                raise AmberWriteError("Error creating SolvatedPDB from System in replica %s" % replica.name)
             
             out = ':'+syspdb.getAutoMaskResIds()
         else:
@@ -922,7 +922,7 @@ class AmberWriter(object):
         T.BROWSER.gotoReplica(replica)
         
         if not (osp.exists(replica.top) and osp.exists(replica.crd)): # and osp.exists(replica.pdb)):
-            raise AmberWriterError("Replica top or crd files not found in current folder: %s, %s")%(replica.top, replica.crd)
+            raise AmberWriterError("Replica top or crd files not found in current folder: %s, %s" % (replica.top, replica.crd))
 
         substDict = {}
 
@@ -1034,7 +1034,7 @@ class AmberWriter(object):
 
     def getAutoMask(self, pdb=None, extraResidues=[]):
         "From a PDB file or replica ref pdb if pdb is None, get an automask of form: 1-100,105-200"
-        from PDB import SolvatedPDB
+        from .PDB import SolvatedPDB
         pdb = pdb or osp.join(self.replica.path,self.replica.ref)
         extraResidues = extraResidues or self.replica.system.extraResList
         pdb = SolvatedPDB(pdb, extraResidues=extraResidues).getSolute()
@@ -1162,7 +1162,7 @@ class AmberWriter(object):
         if system:
             pdb = system.getSolvatedPDB()
         elif pdbFile:
-            from PDB import SolvatedPDB
+            from .PDB import SolvatedPDB
             if extraResidues:
                 if not isinstance(extraResidues, list): extraResidues = [extraResidues]
             pdb = SolvatedPDB(pdbFile, extraResidues=extraResidues)
@@ -1199,7 +1199,7 @@ class Test(BT.BiskitTest):
     
     def test_AmberWriter(self):
         """Create new replica and write MDinput"""
-        from Replicas import Replica
+        from .Replicas import Replica
         
         top = osp.join(T.testRoot(), 'pep','pep.prmtop')
         crd = osp.join(T.testRoot(), 'pep','pep.prmcrd')

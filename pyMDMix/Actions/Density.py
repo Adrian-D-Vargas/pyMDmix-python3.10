@@ -40,7 +40,7 @@ import multiprocessing
 import pyMDMix
 import pyMDMix.tools as T
 from pyMDMix.GridsManager import NewGrid
-from pyMDMix import settings as S
+from pyMDMix from . import settings as S
 
 class DensityError(Exception):
     pass
@@ -71,7 +71,7 @@ class DensityGrids(object):
         
         self.solvent = replica.getSolvent()
         if not self.solvent:
-            raise DensityError("Cannot fetch solvent %s from the database! Make sure there are no conflicting files")%(replica.solvent)
+            raise DensityError("Cannot fetch solvent %s from the database! Make sure there are no conflicting files" % (replica.solvent))
         self.pdb = replica.getPDB()
         
         self.probeselection= probeselection
@@ -100,7 +100,7 @@ class DensityGrids(object):
                 self.log.info("Using PDB file %s as reference to construct density grid"%reference)
                 self.ref=osp.abspath(reference)
             else:
-                raise DensityError("Reference PDB file %s not found.")%reference
+                raise DensityError("Reference PDB file %s not found." % reference)
             
         self.setup()        
         
@@ -480,7 +480,7 @@ class DensityGridsAllHA(object):
         
         self.solvent = replica.getSolvent()
         if not self.solvent:
-            raise DensityError("Cannot fetch solvent %s from the database! Make sure there are no conflicting files")%(replica.solvent)
+            raise DensityError("Cannot fetch solvent %s from the database! Make sure there are no conflicting files" % (replica.solvent))
         self.pdb = replica.getPDB()
 
         if outprefix: self.outprefix = outprefix
@@ -764,7 +764,7 @@ class cppDensity(object):
 
         :arg list steps: list of steps to write input for. Should be a list of integers.
         """
-        from pyMDMix.Amber import AmberWriter
+        from pyMDMix.Amber from . import AmberWriter
 
         self.replica.go()
         if not osp.exists(self.replica.densityfolder): os.mkdir(self.replica.densityfolder)
@@ -820,7 +820,7 @@ class cppDensity(object):
         path = osp.join(self.replica.path, self.replica.densityfolder)
         # Check input file exists
         if not osp.exists(osp.join(path,input_file)):
-            raise AlignError("File %s does not exists in alignment folder of replica %s")%(input_file, self.replica.name)
+            raise AlignError("File %s does not exists in alignment folder of replica %s" % (input_file, self.replica.name))
         outf= input_file.replace('.ptraj','_ptraj.log')
         top = os.pardir+os.sep+self.replica.top
         cmd = S.AMBER_PTRAJ+' {top} < {inf} > {outf}'.format(top=top, inf=input_file, outf=outf)

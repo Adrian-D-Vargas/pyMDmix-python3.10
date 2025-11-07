@@ -24,9 +24,9 @@ class Queue(Command):
             qname = parserargs.queuename
             qlist = pyMDMix.Queue.listQueueSystems()
             if not qname:
-                raise MDMixError("Queue name is needed: give it with option (-n). Avilable queues: %s")%qlist
+                raise MDMixError("Queue name is needed: give it with option (-n). Avilable queues: %s" % qlist)
             if qname not in qlist:
-                raise MDMixError("Wrong queue name. Available queues: %s")%qlist
+                raise MDMixError("Wrong queue name. Available queues: %s" % qlist)
             p = returnMDMixProject(parserargs)
             if p: p.createQueueInputs(qname)
             else:

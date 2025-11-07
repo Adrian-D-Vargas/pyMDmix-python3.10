@@ -162,14 +162,14 @@ def validPath(v):
     try:
         v = absfile( v )
         if not v or not os.path.exists( v ):
-            raise InvalidPath('invalid path %r') % v
+            raise InvalidPath('invalid path %r' % v)
 
         return v
 
     except InvalidPath as e:
         raise
     except Exception as e:
-        raise InvalidPath('error during path validation: %r') % str(e)
+        raise InvalidPath('error during path validation: %r' % str(e))
 
 
 def validBinary(v):
@@ -229,8 +229,8 @@ def numListToMask(numlist):
     from itertools import groupby
     ranges = []
     numlist.sort()
-    for key, group in groupby(enumerate(numlist), lambda (index, item): index - item):
-        group = map(itemgetter(1), group)
+    for key, group in groupby(enumerate(numlist), lambda x: x[0] - x[1]):
+        group = list(map(itemgetter(1), group))
         if len(group) > 1:
             ranges.append('{0}-{1}'.format(group[0], group[-1]))
         else:
@@ -238,11 +238,11 @@ def numListToMask(numlist):
     return ','.join(ranges)
 
 ##### CONSTRUCT A BROWSER
-from Browser import Browser
-BROWSER = Browser()
+from . import Browser
+BROWSER = Browser.Browser()
 
 ##### CONSTRUCT EXECUTOR
-from Executor import Executor
+from . import Executor
 EXECUTOR = Executor()
 
 ##### LOGGING TOOLS
@@ -280,11 +280,11 @@ def traceback_plus():
     traceback.print_exc()
     print("Locals by frame, innermost last")
     for frame in stack:
-        print(print("Frame %s in %s at line %s") % (frame.f_code.co_name,)
+        print("Frame %s in %s at line %s" % (frame.f_code.co_name,
                                              frame.f_code.co_filename,
-                                             frame.f_lineno)
+                                             frame.f_lineno))
         for key, value in frame.f_locals.items():
-            print("\t%20s = ") % key,
+            print(("\t%20s = " % key), end="")
             #We have to be careful not to cause a new error in our error
             #printer! Calling str() on an unknown object could cause an
             #error we don't want.

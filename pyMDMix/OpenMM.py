@@ -32,10 +32,10 @@ import logging
 import string
 import numpy as npy
 #import MDMix.Config as config
-#from MDMix.PDB import PDBManager
+#from MDMix.PDB from . import PDBManager
 
-import tools as T
-import settings as S
+from . import tools as T
+from . import settings as S
 
 class OpenMMWriterError(Exception):
     pass
@@ -109,7 +109,7 @@ class OpenMMWriter(object):
             pdb.setSoluteSolventMask()
 
             if not pdb:
-                raise OpenMMWriteError("Error creating SolvatedPDB from System in replica %s")%replica.name
+                raise OpenMMWriteError("Error creating SolvatedPDB from System in replica %s" % replica.name)
           
                 out = npy.where(pdb.soluteMask)[0]
             else:
@@ -326,7 +326,7 @@ class OpenMMWriter(object):
         T.BROWSER.gotoReplica(replica)
 
         if not (osp.exists(replica.top) and osp.exists(replica.crd)): # and osp.exists(replica.pdb)):
-            raise OpenMMWriterError("Replica top or crd files not found in current folder: %s, %s")%(replica.top, replica.crd)
+            raise OpenMMWriterError("Replica top or crd files not found in current folder: %s, %s" % (replica.top, replica.crd))
 
         substDict = {}
 
@@ -587,8 +587,8 @@ class Test(BT.BiskitTest):
 
     def test_OpenMMWriter(self):
         """Create new replica and write MDinput"""
-        from MDSettings import MDSettings
-        from Systems import SolvatedSystem
+        from MDSettings from . import MDSettings
+        from .Systems import SolvatedSystem
         
         top = osp.join(T.testRoot('pep', 'pep.prmtop'))
         crd = osp.join(T.testRoot('pep', 'pep.prmcrd'))

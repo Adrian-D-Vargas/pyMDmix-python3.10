@@ -53,9 +53,9 @@ import os
 import os.path as osp
 import tempfile
 import logging
-import tools as T
+from . import tools as T
 
-from Structures import FileLock
+from .Structures import FileLock
 
 class ReplicaError(Exception):
     pass
@@ -120,10 +120,10 @@ class Replica(object):
             self.setName(name)
 
             # Init system
-            import Systems
+            from . import Systems
             if system:
                 # Solvated system as input to create the replica
-                if not isinstance(system, Systems.SolvatedSystem):  raise ReplicaError("system should be SolvatedSystem instance. Got %s instead.")%(type(system))
+                if not isinstance(system, Systems.SolvatedSystem):  raise ReplicaError("system should be SolvatedSystem instance. Got %s instead." % (type(system)))
                 self.system = system                #: SolvatedSystem. System with solvent box already created.
             elif top and crd:
                 # Input as PRMTOP and PRMCRD, create solvated system from them
@@ -138,7 +138,7 @@ class Replica(object):
             # ADOPT ATTRIBUTES FROM MDSETTINGS
             # If not defined in kwargs
             if not mdsettings:
-                from MDSettings import MDSettings
+                from MDSettings from . import MDSettings
                 mdsettings = MDSettings(**kwargs)
                 
             for k,v in mdsettings.__dict__.items():
@@ -262,7 +262,7 @@ Solvent: {solvent}
 
     def asMDSettings(self):
         "Return MDSettings object with settings for current replica"
-        from MDSettings import MDSettings
+        from MDSettings from . import MDSettings
         d = self.__dict__.copy()
         [d.pop(i) for i in ('log', 'top', 'crd', 'pdb','ref','path','attached',
                         'extension','replFilePath','system','restrPdb','create',
@@ -282,7 +282,7 @@ Solvent: {solvent}
         if not prefix: prefix = ''
         if not suffix: suffix = ''
         self.log.debug("Fetching replica %s grids (prefix: %s suffix: %s)"%(self.name, prefix, suffix))
-        import GridsManager as GM
+        from . import GridsManager as GM
         grids = []
         for root, dir, files in os.walk(self.path):
             for f in files:
@@ -298,18 +298,18 @@ Solvent: {solvent}
         "Get MD checker according to the simulation program used"
         # Set checker according to mdProgram
         if self.mdProgram == 'AMBER':
-            from Amber import AmberCheck
+            from Amber from . import AmberCheck
             return AmberCheck(self, **kwargs)
         if self.mdProgram == 'OPENMM':
-            from OpenMM import OpenMMCheck
+            from OpenMM from . import OpenMMCheck
             return OpenMMCheck(self, **kwargs)
         elif self.mdProgram == 'NAMD':
-            from NAMD import NAMDCheck
+            from NAMD from . import NAMDCheck
             return NAMDCheck(self, **kwargs)
 
     def getSolvent(self):
         "Return solvent instance assigned to current replica"
-        import Solvents
+        from . import Solvents
         return Solvents.getSolvent(self.solvent)
 
     def getProbes(self):
@@ -330,7 +330,7 @@ Solvent: {solvent}
 
         :return: :class:`Trajectory.Trajectory` object
         """
-        from Trajectory import Trajectory
+        from Trajectory from . import Trajectory
         
         if not stepselection: stepselection = range(1, self.ntrajfiles+1)
         else: self.log.info("Trajectory selected steps: %s"%stepselection)
@@ -343,7 +343,7 @@ Solvent: {solvent}
             self.log.debug("Using aligned trajectory")
         else:
             if not self.isProductionFinished(stepselection):
-                raise ReplicaError("Cannot retrieve trajectory for non-finished steps: %s")%stepselection
+                raise ReplicaError("Cannot retrieve trajectory for non-finished steps: %s" % stepselection)
             path = self.mdpath
             checkext = self.checkProductionExtension
             self.log.debug("Using not aligned trajectory")
@@ -367,7 +367,7 @@ Solvent: {solvent}
 
     def getPDB(self):
         "Return a SolvatedPDB with replica pdb"
-        from PDB import SolvatedPDB
+        from .PDB import SolvatedPDB
         p = SolvatedPDB(pdb=osp.join(self.path, self.pdb), solvent=self.solvent, extraResidues=self.system.extraResList)
 #        p.setSolvent(self.solvent)
         p.fixNumbering()
@@ -591,14 +591,14 @@ Solvent: {solvent}
         # Check folder was created and select appropriate writer
         if not self.__folderscreated: self.createFolder()
         if self.mdProgram == 'AMBER':
-            from Amber import AmberWriter as writer
+            from Amber from . import AmberWriter as writer
         elif self.mdProgram == 'NAMD':
-            from NAMD import NAMDWriter as writer
+            from NAMD from . import NAMDWriter as writer
         elif self.mdProgram == 'OPENMM':
-            from OpenMM import OpenMMWriter as writer
+            from OpenMM from . import OpenMMWriter as writer
 
         else:
-            raise ReplicaError("MD Program not recognized: %s")%self.mdprog
+            raise ReplicaError("MD Program not recognized: %s" % self.mdprog)
 
         # Write commands file and replica config input files
         self.go()
@@ -618,7 +618,7 @@ Solvent: {solvent}
         :arg str queue: Name of the template file defining a queue system. File ``queue_queue_temp.txt`` should exist in users mdmix home directory or package templates.
         """
         if not self.folderscreated(): return False
-        import QueueWriting as Q
+        from . import QueueWriting as Q
         self.log.info("Writing Queue %s input files for replica %s"%(queue,self.name))
         self.go()
         queue = Q.QueueInputWriter(queue, **kwargs)
@@ -759,7 +759,7 @@ Solvent: {solvent}
         for key, value in kwargs.items():
             # Check attribute exists
             if not hasattr(self, key):
-                raise BadAttribute("%s attribute not in Replica object")%key 
+                raise BadAttribute("%s attribute not in Replica object" % key )
             # File pair
             if osp.isfile(value):
                 fname = osp.basename(value)
@@ -784,7 +784,7 @@ Solvent: {solvent}
                     os.symlink(ori, dest)
                 self.log.debug("Linked folder %s content to replica folder %s"%(value, destpath))
             else:
-                raise BadFile("Not a valid path: %s")%value
+                raise BadFile("Not a valid path: %s" % value)
         self.write()
 
     def setPath(self, path, update=True):
@@ -861,7 +861,7 @@ Solvent: {solvent}
             T.BROWSER.gotoReplica(self)
             if not osp.exists(fname):
                 T.BROWSER.goback()
-                raise BadFile("%s file not found in replica folder.")%fname
+                raise BadFile("%s file not found in replica folder." % fname)
             obj = T.load(fname)
             T.BROWSER.goback()
             return obj
@@ -869,7 +869,7 @@ Solvent: {solvent}
 
     def runAlignment(self, ncpus=1, steps=[], waitend=True, **kwargs):
         if kwargs.get('run') and not self.isProductionFinished(steps): raise ReplicaError("Cannot align replica because production stage is not completed.")
-        from Align import Align
+        from Align from . import Align
         Align(self, steps=steps, nthreads=ncpus, waitend=waitend, **kwargs)     
     def runcppDensity(self, ncpus, waitend=True, **kwargs):
         if kwargs.get('run') and not self.isAligned(): raise ReplicaError("Cannot calculate density because alignment is not completed.")
@@ -882,7 +882,7 @@ Solvent: {solvent}
         cppDensity(self, nthreads=ncpus, waitend=waitend,  griddimensions = dimensions, gridorigin=origin,**kwargs)
     def calcEnergy(self, **kwargs):
         "Convert density to energies. Give in ``\*\*kwargs`` all parameters to :meth:`Energy.EnergyConversion.convert`."
-        from Energy import EnergyConversion
+        from Energy from . import EnergyConversion
         econv = EnergyConversion()
         econv.convert(self, **kwargs)
 
@@ -898,7 +898,7 @@ Solvent: {solvent}
     def load(self, replfile=None):
         "Load existing project from pickled file"
         f = replfile or self.replFilePath
-        if not osp.exists(f): raise BadFile("File %s not found.")%f
+        if not osp.exists(f): raise BadFile("File %s not found." % f)
         with FileLock(f) as lock:
             d = T.load(f)
             d['log'] = logging.getLogger("Replica (%s)"%d['name'])

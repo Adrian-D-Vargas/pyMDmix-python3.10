@@ -32,10 +32,10 @@ import logging
 import string
 import numpy as npy
 #import MDMix.Config as config
-#from MDMix.PDB import PDBManager
+#from MDMix.PDB from . import PDBManager
 
-import tools as T
-import settings as S
+from . import tools as T
+from . import settings as S
 
 class NAMDWriterError(Exception):
     pass
@@ -97,7 +97,7 @@ class NAMDWriter(object):
         replica.go()
         self.log.info("Creating restraints.pdb with reference positions and restraining forces at b-factor column")
         if inputpdb:
-            from PDB import SolvatedPDB
+            from .PDB import SolvatedPDB
             pdb = SolvatedPDB(inputpdb, extraResidues=replica.extraResidues)
         else:
             pdb = replica.system.getSolvatedPDB()
@@ -338,7 +338,7 @@ class NAMDWriter(object):
         # Create restrained pdb if needed
         if replica.hasRestraints:
             if not self.createReplicaRestraintPDB(replica):
-                raise NAMDWriterError("Could not save restrain.pdb for replica %s")%replica.name
+                raise NAMDWriterError("Could not save restrain.pdb for replica %s" % replica.name)
 
         # Write inputs
         minok = self.writeMinInput(replica)
@@ -346,7 +346,7 @@ class NAMDWriter(object):
         mdok = self.writeMDInput(replica)
 
         if not (minok and eqok and mdok): 
-            raise NAMDWriterError("MD input not generated for replica %s")%replica.name
+            raise NAMDWriterError("MD input not generated for replica %s" % replica.name)
         
         self.log.info("MD Input OK")
         T.BROWSER.goHome()
@@ -553,8 +553,8 @@ class Test(BT.BiskitTest):
 
     def test_NAMDWriter(self):
         """Create new replica and write MDinput"""
-        from MDSettings import MDSettings
-        from Systems import SolvatedSystem
+        from MDSettings from . import MDSettings
+        from .Systems import SolvatedSystem
         
         top = osp.join(T.testRoot('pep', 'pep.prmtop'))
         crd = osp.join(T.testRoot('pep', 'pep.prmcrd'))

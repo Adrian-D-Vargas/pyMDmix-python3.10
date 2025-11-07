@@ -74,7 +74,7 @@ class Plot(object):
                 outfile = check.getProductionOutputFile(f)
                 
                 if not outfile:
-                    raise PlotError("Output file for step %i could not be found. Make sure all selected steps are finished: %s")%(f,steps)
+                    raise PlotError("Output file for step %i could not be found. Make sure all selected steps are finished: %s" % (f,steps))
                 
                 # fetch properties from file
                 tmpdata = dict([(p,[]) for p in properties])
@@ -329,7 +329,7 @@ class Plot(object):
 
 
 import Biskit.test as BT
-import tools as T
+from . import tools as T
 
 class Test(BT.BiskitTest):
     """Test"""

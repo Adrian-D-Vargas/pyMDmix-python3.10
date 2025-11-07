@@ -48,11 +48,11 @@ import numpy as npy
 
 import Biskit as bi
 import Biskit.mathUtils as MU
-from Biskit.PDBParser import PDBParserError
-from Biskit.PDBParseFile import PDBParseFile
+from Biskit.PDBParser from . import PDBParserError
+from Biskit.PDBParseFile from . import PDBParseFile
 
-import tools as T
-import settings as S
+from . import tools as T
+from . import settings as S
 
 try:
     import mechanize
@@ -187,7 +187,7 @@ class PDB2PQRInterface(object):
             status = match.search(response.read())
             if status: status = status.groups()[0]
             else:
-                raise PDB2PQRError("Error scraping reuslts website. Check website: %s.")%self.br.geturl()
+                raise PDB2PQRError("Error scraping reuslts website. Check website: %s." % self.br.geturl())
             
             if status == 'complete':
                 print("Done")
@@ -198,10 +198,10 @@ class PDB2PQRInterface(object):
                 done = False
                 print("Running... %d\r")%tries,
             else:
-                raise PDB2PQRError("Error in job execution. Check website: %s.")%self.br.geturl()
+                raise PDB2PQRError("Error in job execution. Check website: %s." % self.br.geturl())
         
         print(if not done:)
-            raise PDB2PQRError("Job execution timed out. Check later website for results: %s.")%self.br.geturl()
+            raise PDB2PQRError("Job execution timed out. Check later website for results: %s." % self.br.geturl())
             
         # If link was found download pqr file
         pqrout = None
@@ -708,10 +708,10 @@ class AutoPrepare(object):
             else:
                 raise AutoPrepareError('pdb argument must be a filepath or a PDBModel with valid source files.')
             
-            if not osp.exists(file): raise AutoPrepareError('pdbfile %s not found.')%fi
+            if not osp.exists(file): raise AutoPrepareError('pdbfile %s not found.' % fi)
         elif self.pdb:
             file = self.pdb.source.original()
-            if not osp.exists(file): raise AutoPrepareError('pdbfile %s not found.')%fi
+            if not osp.exists(file): raise AutoPrepareError('pdbfile %s not found.' % fi)
         else:
             raise AutoPrepareError('protonatePDB needs a pdb. Set a PDB with setPdb() or give as argument.')
         
@@ -743,7 +743,7 @@ class AutoPrepare(object):
     
     def saveOFF(self, outname, inpdb=None, unitname='sys', extraff=[]):
         "From a PDBModel or File, load into tLeap and save as ObjectFile."
-        from Amber import AmberCreateSystem
+        from Amber from . import AmberCreateSystem
                
         if not inpdb and self.pdb: inpdb = self.pdb
         else: raise AutoPrepareError("Input needed.")

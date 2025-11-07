@@ -74,9 +74,9 @@ class GridData(object):
               if '.xplor' in fname or '.cns' in fname: self.readXPLOR(fname)
               elif '.dx' in fname: self.readDX(fname)
               else: 
-                raise BadFile("Can not identify %s file format.It should contain 'xplor', 'cns' or 'dx' extension")%fname
+                raise BadFile("Can not identify %s file format.It should contain 'xplor', 'cns' or 'dx' extension" % fname)
             else:
-                raise BadFile("File %s not found.")%fname   
+                raise BadFile("File %s not found." % fname   )
 
         # Construct empty grid
         elif origin is not None:
@@ -1290,7 +1290,7 @@ def getRadialIndices(radius, spacing, minradius=False):
 ###TESTING
 
 import Biskit.test as BT
-import tools as T
+from . import tools as T
 
 class Test(BT.BiskitTest):
     """Test"""

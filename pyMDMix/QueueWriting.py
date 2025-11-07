@@ -36,8 +36,8 @@ import re
 import os
 import os.path as osp
 import glob
-import settings as S
-import tools as T
+from . import settings as S
+from . import tools as T
 
 class QueueInputError(Exception):
     pass
@@ -78,7 +78,7 @@ class QueueInputWriter(object):
                         if n == self.queue: self.templfile = f
 
             # If still no template found, raise QueueInputError
-            if not self.templfile: raise QueueInputError("No template file for queue name %s")%self.queue
+            if not self.templfile: raise QueueInputError("No template file for queue name %s" % self.queue)
 
         self.template = open(self.templfile,'r').read()
 
@@ -109,16 +109,16 @@ class QueueInputWriter(object):
 
         # Get writter
         if replica.mdProgram == 'AMBER':
-            from Amber import AmberWriter
+            from Amber from . import AmberWriter
             writer = AmberWriter(replica)
         elif replica.mdProgram == 'NAMD':
-            from NAMD import NAMDWriter
+            from NAMD from . import NAMDWriter
             writer = NAMDWriter(replica)
         elif replica.mdProgram == 'OPENMM':
-            from OpenMM import OpenMMWriter
+            from OpenMM from . import OpenMMWriter
             writer = OpenMMWriter(replica)
         else:
-            raise QueueInputError("Replica has unknown mdProgram attribute: %s")%replica.mdProgram
+            raise QueueInputError("Replica has unknown mdProgram attribute: %s" % replica.mdProgram)
 
         # start writing files
         # MINIMIZATION

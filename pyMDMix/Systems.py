@@ -44,10 +44,10 @@ import os
 import os.path as osp
 import logging
 
-import Solvents
-import tools as T
-import settings as S
-from Structures import FileLock
+from . import Solvents
+from . import tools as T
+from . import settings as S
+from .Structures import FileLock
 
 class SystemError(Exception):
     pass
@@ -118,8 +118,8 @@ class System(object):
         return s
 
     def __add__(self, other):
-        from MDSettings import MDSettings
-        from Replicas import Replica
+        from MDSettings from . import MDSettings
+        from .Replicas import Replica
 
         if isinstance(other, MDSettings): other = [other]
         if isinstance(other, list):
@@ -144,7 +144,7 @@ class System(object):
 
     def __initCreate(self):
         if not self.create:
-            from Amber import AmberCreateSystem
+            from Amber from . import AmberCreateSystem
             self.create = AmberCreateSystem(FFlist=self.FF, informative=False)
             if self.amberOFF:
                 tmpoff = self.amberOFF.writeTmp()
@@ -192,7 +192,7 @@ class System(object):
         :arg str amberOFF: Path to amber object file.
         :arg str unitname: Name of the unit we should use in the future. If not given, automatically take the first unit found in the file.
         """
-        from OFFManager import OFFManager
+        from OFFManager from . import OFFManager
         
         # Special case: test
         # Grab off from testing directory
@@ -292,7 +292,7 @@ class System(object):
     def load(self, sysfile=None):
         "Load existing project from pickled file"
         f = sysfile or self.sysFilePath
-        if not osp.exists(f): raise BadFile("File %s not found.")%f
+        if not osp.exists(f): raise BadFile("File %s not found." % f)
         with FileLock(f) as lock:
             d = T.load(f)
 #            d['log'] = logging.getLogger("System (%s)"%d['name'])
@@ -333,8 +333,8 @@ class SolvatedSystem(System):
         return "%s SolvatedSystem"%self.name
 
     def __add__(self, other):
-        from MDSettings import MDSettings
-        from Replicas import Replica
+        from MDSettings from . import MDSettings
+        from .Replicas import Replica
         
         if isinstance(other, MDSettings): other = [other]
         if isinstance(other, list):
@@ -354,14 +354,14 @@ class SolvatedSystem(System):
         :arg str top: path to PRMTOP file
         :arg str crd: path to PRMCRD file
         """
-        if not osp.exists(top): raise BadFile("File %s not found.")%top
-        if not osp.exists(crd): raise BadFile("File %s not found.")%crd
+        if not osp.exists(top): raise BadFile("File %s not found." % top)
+        if not osp.exists(crd): raise BadFile("File %s not found." % crd)
         self.top = open(top,'r').read()
         self.crd = open(crd,'r').read()
         self.setPDBfromTOPCRD()
 
         if self.ref:
-            from PDB import SolvatedPDB
+            from .PDB import SolvatedPDB
             self.ref = SolvatedPDB(self.ref)
         else:
             # Reference not given, create one from self.pdb
@@ -394,7 +394,7 @@ class SolvatedSystem(System):
         """
         Return a :class:`~PDB.SolvatedPDB` object from the PDB file generated from TOP and CRD
         """
-        from PDB import SolvatedPDB
+        from .PDB import SolvatedPDB
         pdb = self.getTmpPdbFile()
         o = SolvatedPDB(pdb, self.extraResList)
         self.cleanTmp()
@@ -434,7 +434,7 @@ class SolvatedSystem(System):
     def setPDBfromTOPCRD(self):
         "Save a PDB file from the TOP and CRD files in attributes."
         import time
-        from Amber import AmberCreateSystem
+        from Amber from . import AmberCreateSystem
 
         self.getTmpTopCrdFiles()
         self.tmp_pdb = tmp = T.tempfile.mktemp()+'.pdb'
@@ -473,7 +473,7 @@ def parseSystemConfigFile(projectConfigFile):
     Auxiliary function to build a System from a System configuration file (SCF)
     """
     from Parsers import SystemConfigFileParser
-    if not osp.exists(projectConfigFile): raise BadFile("File %s not found.")%projectConfigFile
+    if not osp.exists(projectConfigFile): raise BadFile("File %s not found." % projectConfigFile)
     sys = SystemConfigFileParser().parse(projectConfigFile)
     return sys
 

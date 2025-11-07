@@ -34,10 +34,10 @@ class Add(Command):
             if not sysname:
                 avail = p.systems.keys()
                 if len(avail) == 1: sysname = avail[0]
-                else: raise MDMixError("More than one system in current project. Choose which one you wish to prepare with -sys option. Available systems: %s")%avail
+                else: raise MDMixError("More than one system in current project. Choose which one you wish to prepare with -sys option. Available systems: %s" % avail)
             else:
                 if not sysname in p.systems.keys():
-                    raise MDMixError("Wrong system name. Project systems are: %s")%p.systems.keys()
+                    raise MDMixError("Wrong system name. Project systems are: %s" % p.systems.keys())
             print("Creating replicas for system %s")%sysname
             settings = pyMDMix.parseSettingsConfigFile(file)
             p.createReplicas(sysname, settings)
@@ -46,6 +46,6 @@ class Add(Command):
             if not parserargs.groupname:
                 raise MDMixError("Groupname is required (-gn option).")
             if not parserargs.selection:
-                raise MDMixError("Selection list is mandatory for creating group %s (use -s option).")%parserargs.groupname
+                raise MDMixError("Selection list is mandatory for creating group %s (use -s option)." % parserargs.groupname)
             p.createGroup(parserargs.groupname, parserargs.selection)
             print("DONE")

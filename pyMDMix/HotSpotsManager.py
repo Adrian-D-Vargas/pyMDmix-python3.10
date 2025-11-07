@@ -36,8 +36,8 @@ import numpy as npy
 from scipy.cluster import hierarchy
 from scipy.spatial import distance
 
-from GridsManager import Grid
-import tools as T
+from .GridsManager import Grid
+from . import tools as T
 
 class HotSpot(object):
     "Contain a set of points defining a hotspot and its properties: volume, chemical type, etc..."
@@ -86,7 +86,7 @@ class HotSpot(object):
         if energymethod in valmethods:
             self.energymethod = energymethod
         else:
-            raise AttributeError("Wrong energy averaging method. Valid methods are: %s")%valmethods
+            raise AttributeError("Wrong energy averaging method. Valid methods are: %s" % valmethods)
         
         # Calculate volume element from spacing
         self.spacing = spacing
@@ -578,7 +578,7 @@ class HotSpotMultipleSet(HotSpotSet):
             if not isinstance(hsetlist, list): hsetlist = [hsetlist]
             for hi, hset in enumerate(hsetlist):
 #                if not isinstance(hset, HotSpotSet): 
-#                    raise HotSpotMultipleSetError("Error adding %s. This should be a HotSpotSet object.")%hset
+#                    raise HotSpotMultipleSetError("Error adding %s. This should be a HotSpotSet object." % hset)
                 
                 # Assign type from typelist if present or keep from HotSpotSet.probe attribute
                 if probelist: hset.probe = probelist[hi]

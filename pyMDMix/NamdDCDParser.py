@@ -32,7 +32,7 @@ import struct
 
 import numpy as npy
 import Biskit.tools as T
-from Biskit.PDBModel import PDBModel
+from Biskit.PDBModel from . import PDBModel
 from Biskit.LogFile import StdLog
 
 class NamdDCDParser:

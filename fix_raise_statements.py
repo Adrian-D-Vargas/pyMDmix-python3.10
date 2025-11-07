@@ -15,7 +15,7 @@ def fix_raise_statements(filepath):
     
     original_content = content
     
-    # Fix raise statements like: raise Error("message")%args
+    # Fix raise statements like: raise Error("message" % args)
     # to: raise Error("message" % args)
     content = re.sub(
         r'raise\s+(\w+)\("([^"]*)"\)\s*%\s*([^\n]+)',
@@ -23,7 +23,7 @@ def fix_raise_statements(filepath):
         content
     )
     
-    # Fix raise statements like: raise Error('message')%args
+    # Fix raise statements like: raise Error('message' % args)
     # to: raise Error('message' % args)
     content = re.sub(
         r"raise\s+(\w+)\('([^']*)'\)\s*%\s*([^\n]+)",

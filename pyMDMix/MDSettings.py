@@ -98,8 +98,8 @@ __date__ ="$16-mar-2014 21:03:48$"
 
 import sys
 import difflib
-import SettingsParser as P
-import settings as S
+from . import SettingsParser as P
+from . import settings as S
 
 class MDSettingsError(Exception):
     pass
@@ -207,9 +207,9 @@ def parseSettingsConfigFile(settingsConfigFile, noSolvent=False):
     :return: List of :class:`~Replicas.Replica` objects constructed with all parameters in the RCF
     """
     import os.path as osp
-    from Parsers import MDSettingsConfigFileParser
+    from Parsers from . import MDSettingsConfigFileParser
     
-    if not osp.exists(settingsConfigFile): raise BadFile("File %s not found.")%settingsConfigFile
+    if not osp.exists(settingsConfigFile): raise BadFile("File %s not found." % settingsConfigFile)
     if noSolvent: sets = MDSettingsConfigFileParser().parseNoSolvent(settingsConfigFile)
     else: sets = MDSettingsConfigFileParser().parse(settingsConfigFile)
     return sets
