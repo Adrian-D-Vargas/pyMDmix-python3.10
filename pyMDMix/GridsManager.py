@@ -571,7 +571,7 @@ class GridSpace(object):
         if mode in ('point','avg','boltz','min','max','volmean'):
             self._defaultmode = mode
         else:
-            print("Warning mode "),mode," is invalid."
+            print("Warning mode ", mode, " is invalid.")
 
     def setT(self, T):
         self._defT = T

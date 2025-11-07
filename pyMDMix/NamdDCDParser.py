@@ -125,12 +125,12 @@ class NamdDCDParser:
         
         if verbose:
             print(self.title)
-            print("Number of atoms:"), self.natoms
-            print("Number of frames:"),self.nset
-            print("Starting timestep"), self.istart
-            print("Final timestep:"), self.ntot
-            print("Steps between frames:"), self.nsavc
-            print("Time step of simulation:"), self.delta
+            print("")
+            print("")
+            print("")
+            print("")
+            print("")
+            print("")
     
     def set_pointerInfo(self):
         """

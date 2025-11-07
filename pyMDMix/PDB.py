@@ -269,7 +269,7 @@ class SolvatedPDB(bi.PDBModel):
             self.addAcceptedResidues(extraResidueList)
         if not npy.any(self.soluteMask): self.setSoluteSolventMask()
         resIds = npy.unique(npy.array(self['residue_number'])[self.soluteMask])
-        resGroups = [map(itemgetter(1),g) for k,g in groupby(enumerate(resIds), lambda (i,x):i-x)]
+        resGroups = [map(itemgetter(1),g) for k,g in groupby(enumerate(resIds), lambda ix: ix[0]-ix[1])]
         outMask = ''
         nGroups = len(resGroups)
         ng = 1

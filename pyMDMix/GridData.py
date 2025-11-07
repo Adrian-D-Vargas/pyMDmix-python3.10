@@ -151,10 +151,10 @@ class GridData(object):
     def __call__(self):
         """Returns information about the grid if already defined"""
         if (self.data !='' and self.origin !='' and self.delta !=''):
-            print("Grid instance source:"),self.source
-            print("Data shape: "),self.data.shape," number of entries: ",self.data.size
-            print("Grid Origin: "),self.origin
-            print("Grid Spacing: "),self.delta
+            print("")
+            print("")," number of entries: ",self.data.size
+            print("")
+            print("")
         else: print("Empty grid instance or data missing!")
   
     def readXPLOR(self, CNS):
@@ -847,10 +847,12 @@ class GridFromPDB(GridData):
             prot = PDB
         elif os.path.exists(PDB):
             pdb_model = Biskit.PDBModel(PDB)                    #Open pdb as Biskit PDBModel
-            if takeProtein: prot = pdb_model.compress(pdb_model.maskProtein())  #Read only protein from PDBModel
-        else: prot = pdb_model
+            if takeProtein: 
+                prot = pdb_model.compress(pdb_model.maskProtein())  #Read only protein from PDBModel
+            else: 
+                prot = pdb_model
         else: 
-            print("Couldn't locate PDB file: "),PDB
+            print("Couldn't locate PDB file: ", PDB)
             return False        
         
         xyz = prot.xyz                                                  # get protein coordinates
@@ -869,9 +871,9 @@ class GridFromMol2(GridData):
         extension = ( xyz.max(axis=0)-xyz.min(axis=0) ) + margin*2      #protein extension in x,y,z axis
         spacing = extension/npy.array(shape)                             #New grid size with buff*2 angstroms added in each axis
         origin = xyz.min(axis=0) - margin            #grid min cartesian coordinates as origin build a zeros grid with 0.5 spacing
-        #print("Applying "),buff," Angstroms of buffer each side."
-        #print("Origin: "),origin
-        #print("Spacing: "),spacing
+        #print("")," Angstroms of buffer each side."
+        #print("")
+        #print("")
         GridData.__init__(self,shape=shape,origin=origin,spacing=spacing,geomExtension=extension,value_filling=value_filling)
         self.source = 'Generated from Mol2 file: '+str(Mol2Model)
 

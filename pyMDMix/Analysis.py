@@ -37,7 +37,7 @@ import os
 
 #from .Solvents import SolventManager
 from .Replicas import Replica
-from Actions import *
+from .Actions import *
 import multiprocessing as multi
 #from .GridsManager import Grid, GridSpace
 
@@ -148,7 +148,8 @@ class ActionsManager(object):
 
 
 if __name__ == "__main__":
-    print("")"
+    print("")
+    """
 import pyMDMix
 import pyMDMix.Analysis as A
 p=pyMDMix.loadProject()
@@ -158,4 +159,4 @@ anal.addReplicas(p.replicas.values())
 anal.prepareRun(spherecenter=[10,6,8])
 anal.run()
 anal.processResults()
-"""
+    """
