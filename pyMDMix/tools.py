@@ -162,14 +162,14 @@ def validPath(v):
     try:
         v = absfile( v )
         if not v or not os.path.exists( v ):
-            raise InvalidPath, 'invalid path %r' % v
+            raise InvalidPath('invalid path %r') % v
 
         return v
 
-    except InvalidPath, e:
+    except InvalidPath as e:
         raise
-    except Exception, e:
-        raise InvalidPath, 'error during path validation: %r' % str(e)
+    except Exception as e:
+        raise InvalidPath('error during path validation: %r') % str(e)
 
 
 def validBinary(v):
@@ -184,11 +184,11 @@ def validBinary(v):
     """
     try:
         if not v:
-            raise IOError, 'empty path'
+            raise IOError('empty path')
 
         return absbinary( v )
 
-    except IOError, msg:
+    except IOError as msg:
         raise InvalidBinary( str(msg) )
 
 def amberMaskToDict(maskstring):
@@ -199,7 +199,7 @@ def amberMaskToDict(maskstring):
     for el in splited:
         if '@' in el:
             split1 = el.split('@')
-            if not out.has_key(split1[0]):
+            if not split1[0] in out:
                 out[split1[0]] =[k.strip() for k in split1[1].split(',')]
             else:
                 out[split1[0]] += [k.strip() for k in split1[1].split(',')]
@@ -278,31 +278,30 @@ def traceback_plus():
         f = f.f_back
     stack.reverse()
     traceback.print_exc()
-    print "Locals by frame, innermost last"
+    print("Locals by frame, innermost last")
     for frame in stack:
-        print
-        print "Frame %s in %s at line %s" % (frame.f_code.co_name,
+        print(print("Frame %s in %s at line %s") % (frame.f_code.co_name,)
                                              frame.f_code.co_filename,
                                              frame.f_lineno)
         for key, value in frame.f_locals.items():
-            print "\t%20s = " % key,
+            print("\t%20s = ") % key,
             #We have to be careful not to cause a new error in our error
             #printer! Calling str() on an unknown object could cause an
             #error we don't want.
             try:                   
-                print value
+                print(value)
             except:
-                print "<ERROR WHILE PRINTING VALUE>"
+                print("<ERROR WHILE PRINTING VALUE>")
 
 #### CLEAN NAMESPACE
 del Browser, Executor
 
 
 if __name__ == "__main__":
-    print projectRoot()
-    print solventsRoot()
+    print(projectRoot())
+    print(solventsRoot())
     l = [[1,2,3],4,[[5,6],[[7],[8],[9,10,11]],[[12,13],14]]]
-    print simplifyNestedList(l)
+    print(simplifyNestedList(l))
 
     BROWSER = Browser()
 
@@ -313,9 +312,9 @@ if __name__ == "__main__":
             self.browser = BROWSER
 
         def chdir(self, d):
-            print 'PREV:', self.name, self.browser.getcwd()
+            print('PREV:'), self.name, self.browser.getcwd()
             self.browser.chdir(d)
-            print 'NEW:', self.name, self.browser.getcwd()
+            print('NEW:'), self.name, self.browser.getcwd()
 
     testA = A('a')
     testB = A('b')
@@ -323,7 +322,7 @@ if __name__ == "__main__":
     testA.chdir('..')
     testB.chdir('..')
     testA.browser.goup()
-    print testA.name, testA.browser.cwd
-    print testB.name, testB.browser.cwd
+    print(testA.name, testA.browser.cwd)
+    print(testB.name, testB.browser.cwd)
     testB.browser.goback()
-    print testA.name, testA.browser.cwd
+    print(testA.name, testA.browser.cwd)

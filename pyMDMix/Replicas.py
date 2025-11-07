@@ -123,7 +123,7 @@ class Replica(object):
             import Systems
             if system:
                 # Solvated system as input to create the replica
-                if not isinstance(system, Systems.SolvatedSystem):  raise ReplicaError, "system should be SolvatedSystem instance. Got %s instead."%(type(system))
+                if not isinstance(system, Systems.SolvatedSystem):  raise ReplicaError("system should be SolvatedSystem instance. Got %s instead.")%(type(system))
                 self.system = system                #: SolvatedSystem. System with solvent box already created.
             elif top and crd:
                 # Input as PRMTOP and PRMCRD, create solvated system from them
@@ -141,7 +141,7 @@ class Replica(object):
                 from MDSettings import MDSettings
                 mdsettings = MDSettings(**kwargs)
                 
-            for k,v in mdsettings.__dict__.iteritems():
+            for k,v in mdsettings.__dict__.items():
                 if k == 'name': continue
                 if k == 'FF': continue
                 setattr(self, k, v)
@@ -343,7 +343,7 @@ Solvent: {solvent}
             self.log.debug("Using aligned trajectory")
         else:
             if not self.isProductionFinished(stepselection):
-                raise ReplicaError, "Cannot retrieve trajectory for non-finished steps: %s"%stepselection
+                raise ReplicaError("Cannot retrieve trajectory for non-finished steps: %s")%stepselection
             path = self.mdpath
             checkext = self.checkProductionExtension
             self.log.debug("Using not aligned trajectory")
@@ -405,7 +405,7 @@ Solvent: {solvent}
         d = {}
         for g in self.grids:
             if set([g.probe]) & set(probelist):
-                if not d.has_key(g.probe): d[g.probe] = []
+                if not g.probe in d: d[g.probe] = []
                 d[g.probe].append(g)
         return d
         
@@ -598,7 +598,7 @@ Solvent: {solvent}
             from OpenMM import OpenMMWriter as writer
 
         else:
-            raise ReplicaError, "MD Program not recognized: %s"%self.mdprog
+            raise ReplicaError("MD Program not recognized: %s")%self.mdprog
 
         # Write commands file and replica config input files
         self.go()
@@ -660,7 +660,7 @@ Solvent: {solvent}
 
         """
         if not self.name:
-            raise ReplicaError, "Unnamed replica folder can not be created."
+            raise ReplicaError("Unnamed replica folder can not be created.")
         
         if self.system and self.eqfolder and self.mdfolder:
             import distutils.dir_util as du
@@ -688,7 +688,7 @@ Solvent: {solvent}
                 self.crd = basenames+'.prmcrd'
                 self.pdb = basenames+'.pdb'
             else:
-                raise ReplicaError, "Error saving system top, crd or pdb files"
+                raise ReplicaError("Error saving system top, crd or pdb files")
 
             # update replica path and save replica file
             T.BROWSER.chdir(self.name)
@@ -708,7 +708,7 @@ Solvent: {solvent}
             T.BROWSER.chdir(pwd)
 #            self.log.info("Created folder structure for replica %s"%self.name)
         else:
-            raise ReplicaError, "Folder names or replica name not set. Cannot create folders."
+            raise ReplicaError("Folder names or replica name not set. Cannot create folders.")
 
     def createAll(self, queue=False, **kwargs):
         """
@@ -756,10 +756,10 @@ Solvent: {solvent}
         if not self.__folderscreated: self.createFolder()
         self.go()
         self.log.debug("Importing data to %s"%T.BROWSER.getcwd())
-        for key, value in kwargs.iteritems():
+        for key, value in kwargs.items():
             # Check attribute exists
             if not hasattr(self, key):
-                raise BadAttribute, "%s attribute not in Replica object"%key 
+                raise BadAttribute("%s attribute not in Replica object")%key 
             # File pair
             if osp.isfile(value):
                 fname = osp.basename(value)
@@ -784,7 +784,7 @@ Solvent: {solvent}
                     os.symlink(ori, dest)
                 self.log.debug("Linked folder %s content to replica folder %s"%(value, destpath))
             else:
-                raise BadFile, "Not a valid path: %s"%value
+                raise BadFile("Not a valid path: %s")%value
         self.write()
 
     def setPath(self, path, update=True):
@@ -823,7 +823,7 @@ Solvent: {solvent}
         # Go to replica folder if not there
         T.BROWSER.gotoReplica(self)
         # If attachname present, remove it first
-        if self.attached.has_key(attachname): self.dettach(attachname)
+        if self.attachname in attached: self.dettach(attachname)
 
         # Obtain temp name, save pickle and store info in self.attached
         attachfile = fname = os.path.basename(tempfile.mktemp(prefix=self.name+'_%s_'%attachname))
@@ -861,18 +861,18 @@ Solvent: {solvent}
             T.BROWSER.gotoReplica(self)
             if not osp.exists(fname):
                 T.BROWSER.goback()
-                raise BadFile, "%s file not found in replica folder."%fname
+                raise BadFile("%s file not found in replica folder.")%fname
             obj = T.load(fname)
             T.BROWSER.goback()
             return obj
         else: return False
 
     def runAlignment(self, ncpus=1, steps=[], waitend=True, **kwargs):
-        if kwargs.get('run') and not self.isProductionFinished(steps): raise ReplicaError, "Cannot align replica because production stage is not completed."
+        if kwargs.get('run') and not self.isProductionFinished(steps): raise ReplicaError("Cannot align replica because production stage is not completed.")
         from Align import Align
         Align(self, steps=steps, nthreads=ncpus, waitend=waitend, **kwargs)     
     def runcppDensity(self, ncpus, waitend=True, **kwargs):
-        if kwargs.get('run') and not self.isAligned(): raise ReplicaError, "Cannot calculate density because alignment is not completed."
+        if kwargs.get('run') and not self.isAligned(): raise ReplicaError("Cannot calculate density because alignment is not completed.")
         from Actions.Density import DensityGrids, cppDensity
         samplegrid = DensityGrids(self, probeselection=kwargs['probelist'], outprefix=kwargs['outprefix'], includeCOM=kwargs['includeCOM'],
                             onlyCOM=kwargs['onlyCOM'], stepselection=kwargs['nanosel'], reference=kwargs['ref'])
@@ -898,12 +898,12 @@ Solvent: {solvent}
     def load(self, replfile=None):
         "Load existing project from pickled file"
         f = replfile or self.replFilePath
-        if not osp.exists(f): raise BadFile, "File %s not found."%f
+        if not osp.exists(f): raise BadFile("File %s not found.")%f
         with FileLock(f) as lock:
             d = T.load(f)
             d['log'] = logging.getLogger("Replica (%s)"%d['name'])
             d['grids'] = None
-            if not d.has_key('prod_steps'): d['prod_steps'] = d['nvt_prod_steps']
+            if not 'prod_steps' in d: d['prod_steps'] = d['nvt_prod_steps']
             self.__dict__.update(d)
 
 
@@ -933,9 +933,9 @@ def loadReplica(replicafile=None):
         import glob
         files = glob.glob('*.mrepl')
         if len(files) > 1:
-            raise ReplicaError,"More than one project file in current folder. Please remove the invald one."
+            raise ReplicaError("More than one project file in current folder. Please remove the invald one.")
         elif not files:
-            raise ReplicaError,"No file found with extension *.mrepl in current folder and no path was given."
+            raise ReplicaError("No file found with extension *.mrepl in current folder and no path was given.")
         replicafile = files[0]
     return Replica(fromfile=replicafile)
 

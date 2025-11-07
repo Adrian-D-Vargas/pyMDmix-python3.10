@@ -92,7 +92,7 @@ class NAMDWriter(object):
         :return: True if file correctly saved or replica.restrMode == FREE. False otherwise.
         """        
         replica = replica or self.replica
-        if not replica: raise NAMDWriterError, "Replica not assigned."
+        if not replica: raise NAMDWriterError("Replica not assigned.")
         
         replica.go()
         self.log.info("Creating restraints.pdb with reference positions and restraining forces at b-factor column")
@@ -148,7 +148,7 @@ class NAMDWriter(object):
         :returns: string with execution command.
         """
         replica = replica or self.replica
-        if not replica: raise NAMDWriterError, "Replica not assigned."
+        if not replica: raise NAMDWriterError("Replica not assigned.")
 
         if process == 'min':
             command = S.NAMD_EXE+' min.in &> min.out'
@@ -179,7 +179,7 @@ class NAMDWriter(object):
         :type replica: :class:`~Replicas.Replica`
         """
         replica = replica or self.replica
-        if not replica: raise NAMDWriterError, "Replica not assigned."
+        if not replica: raise NAMDWriterError("Replica not assigned.")
 
         # Set variables
         outcommands = []
@@ -201,7 +201,7 @@ class NAMDWriter(object):
     def writeCommands(self, replica=False, outfile='COMMANDS.sh'):
         "Write list of commands to run the MD into an output file."
         replica = replica or self.replica
-        if not replica: raise NAMDWriterError, "Replica not assigned."
+        if not replica: raise NAMDWriterError("Replica not assigned.")
         commands = self.getReplicaCommands(replica)
         open(outfile,'w').write('\n'.join(commands))
         ok = osp.exists(outfile)
@@ -215,7 +215,7 @@ class NAMDWriter(object):
          :type replica: :class:`~Replicas.Replica`
         """
         replica = replica or self.replica
-        if not replica: raise NAMDWriterError, "Replica not assigned."
+        if not replica: raise NAMDWriterError("Replica not assigned.")
         
         T.BROWSER.gotoReplica(replica)
         
@@ -243,7 +243,7 @@ class NAMDWriter(object):
             replica     (ReplicaInfo)   Replica instance
         """
         replica = replica or self.replica
-        if not replica: raise NAMDWriterError, "Replica not assigned."
+        if not replica: raise NAMDWriterError("Replica not assigned.")
         
         restr = ''
         if replica.hasRestraints: restr = self.restr
@@ -286,7 +286,7 @@ class NAMDWriter(object):
             replica     (ReplicaInfo)   Replica instance
         """
         replica = replica or self.replica
-        if not replica: raise NAMDWriterError, "Replica not assigned."
+        if not replica: raise NAMDWriterError("Replica not assigned.")
         
         T.BROWSER.gotoReplica(replica)
         
@@ -327,19 +327,18 @@ class NAMDWriter(object):
         
     def writeReplicaInput(self, replica=False):
         replica = replica or self.replica
-        if not replica: raise NAMDWriterError, "Replica not assigned."
+        if not replica: raise NAMDWriterError("Replica not assigned.")
         
         T.BROWSER.gotoReplica(replica)
         self.log.info("Writing NAMD simulation input files for replica %s"%replica.name)
 
         if not (osp.exists(replica.top) and osp.exists(replica.crd) and osp.exists(replica.pdb)):
             m = "Replica top, crd or pdb files does not exist in the folder: %s, %s, %s"%(replica.top, replica.crd, replica.pdb)
-            raise NAMDWriterError, m
-
+            raise NAMDWriterError(m)
         # Create restrained pdb if needed
         if replica.hasRestraints:
             if not self.createReplicaRestraintPDB(replica):
-                raise NAMDWriterError, "Could not save restrain.pdb for replica %s"%replica.name
+                raise NAMDWriterError("Could not save restrain.pdb for replica %s")%replica.name
 
         # Write inputs
         minok = self.writeMinInput(replica)
@@ -347,7 +346,7 @@ class NAMDWriter(object):
         mdok = self.writeMDInput(replica)
 
         if not (minok and eqok and mdok): 
-            raise NAMDWriterError, "MD input not generated for replica %s"%replica.name
+            raise NAMDWriterError("MD input not generated for replica %s")%replica.name
         
         self.log.info("MD Input OK")
         T.BROWSER.goHome()
@@ -372,7 +371,7 @@ class NAMDCheck(object):
     def checkMinimization(self, replica=False):
         "Check if minimization run correctly"
         replica = replica or self.replica
-        if not replica: raise NAMDCheckError, "Replica not assigned."
+        if not replica: raise NAMDCheckError("Replica not assigned.")
 
         # Move to replica path if not yet there
         T.BROWSER.gotoReplica(replica)
@@ -401,7 +400,7 @@ class NAMDCheck(object):
         Returns: True or False
         """
         replica = replica or self.replica
-        if not replica: raise NAMDCheckError, "Replica not assigned."
+        if not replica: raise NAMDCheckError("Replica not assigned.")
         if not isinstance(stepselection, list): stepselection=[stepselection]
 
         # Check all equilibration steps (look for 'Total CPU time:')
@@ -430,7 +429,7 @@ class NAMDCheck(object):
         :rtype: str or bool
         """
         replica = replica or self.replica
-        if not replica: raise NAMDCheckError, "Replica not assigned."
+        if not replica: raise NAMDCheckError("Replica not assigned.")
 
         # Move to replica path if not yet there
         T.BROWSER.gotoReplica(replica)
@@ -454,7 +453,7 @@ class NAMDCheck(object):
         :rtype: str or bool
         """
         replica = replica or self.replica
-        if not replica: raise NAMDCheckError, "Replica not assigned."
+        if not replica: raise NAMDCheckError("Replica not assigned.")
 
         # Move to replica path if not yet there
         T.BROWSER.gotoReplica(replica)
@@ -476,7 +475,7 @@ class NAMDCheck(object):
         Returns: True or False
         """
         replica = replica or self.replica
-        if not replica: raise NAMDCheckError, "Replica not assigned."
+        if not replica: raise NAMDCheckError("Replica not assigned.")
         if not isinstance(stepselection, list): stepselection=[stepselection]
 
         selection = stepselection or range(1, replica.ntrajfiles+1)
@@ -495,7 +494,7 @@ class NAMDCheck(object):
         "Check in current folder min/ eq/ and md/ for N nanoseconds taken from project info\
          if 'returnsteps', don't evaluate and just return True or False for min, eq and md steps in a dictironary."
         replica = replica or self.replica
-        if not replica: raise NAMDCheckError, "Replica not assigned."
+        if not replica: raise NAMDCheckError("Replica not assigned.")
 
         stepsdone = {}
         stepsdone['min'] = self.checkMinimization(self.replica)
@@ -524,7 +523,7 @@ class NAMDCheck(object):
         :return float Volume: Simulation volume.
         """
         replica = replica or self.replica
-        if not replica: raise NAMDCheckError, "Replica not assigned."
+        if not replica: raise NAMDCheckError("Replica not assigned.")
         boxextension = boxextension or 'xsc'
         
         # Work on step. If not given, fetch last completed production step.

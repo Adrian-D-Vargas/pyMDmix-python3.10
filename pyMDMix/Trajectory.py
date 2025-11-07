@@ -50,7 +50,7 @@ class TrajFile(object):
         self.frameselection = frameselection
         self.extension = osp.splitext(self.fname)[1].lstrip('.')
         if not self.extension in S.avail_trajext:
-            raise TrajFileError, "Wrong extension %s. Expected extensions: %s"%(self.extension, ','.join(S.avail_trajext))
+            raise TrajFileError("Wrong extension %s. Expected extensions: %s")%(self.extension, ','.join(S.avail_trajext))
         self.loadFile()
 
     def __iter__(self):
@@ -67,7 +67,7 @@ class TrajFile(object):
                 self.traj = ncdf.NetCDFFile(self.fname,'r').variables['coordinates']
                 self.nextFunction = self.returnFrameFromNetcdf
             except ImportError:
-                raise TrajFileError, "Can't read NetCDF trajectory"
+                raise TrajFileError("Can't read NetCDF trajectory")
         elif self.extension in ('dcd',):
             from NamdDCDParser import NamdDCDParser
             self.traj = NamdDCDParser(self.fname, self.pdb, box=1)

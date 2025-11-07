@@ -97,19 +97,19 @@ class OpenMMWriter(object):
         :returns: index of atoms to be restrained or **False** if replica has FREE restrain mode.
         """
         replica = replica or self.replica
-        if not replica: raise OpenMMWriterError, "Replica not assigned."
+        if not replica: raise OpenMMWriterError("Replica not assigned.")
 
         if replica.restrMode == 'FREE': return False
 
         if not replica.restrMask or replica.restrMask.upper() == 'AUTO':
             # Obtain mask from residue ids in solute
             if not replica.system:
-                raise OpenMMWriterError, "Replica System not set. Can not generate mask."
+                raise OpenMMWriterError("Replica System not set. Can not generate mask.")
             pdb = replica.getPDB()
             pdb.setSoluteSolventMask()
 
             if not pdb:
-                raise OpenMMWriteError, "Error creating SolvatedPDB from System in replica %s"%replica.name
+                raise OpenMMWriteError("Error creating SolvatedPDB from System in replica %s")%replica.name
           
                 out = npy.where(pdb.soluteMask)[0]
             else:
@@ -150,7 +150,7 @@ class OpenMMWriter(object):
         :returns: string with execution command.
         """
         replica = replica or self.replica
-        if not replica: raise OpenMMWriterError, "Replica not assigned."
+        if not replica: raise OpenMMWriterError("Replica not assigned.")
 
         prevsep = os.pardir+os.sep
         top = osp.basename(replica.top)
@@ -216,7 +216,7 @@ class OpenMMWriter(object):
         :type replica: :class:`~Replicas.Replica`
         """
         replica = replica or self.replica
-        if not replica: raise OpenMMWriterError, "Replica not assigned."
+        if not replica: raise OpenMMWriterError("Replica not assigned.")
 
         # Set variables
         outcommands = []
@@ -238,7 +238,7 @@ class OpenMMWriter(object):
     def writeCommands(self, replica=False, outfile='COMMANDS.sh'):
         "Write list of commands to run the MD into an output file."
         replica = replica or self.replica
-        if not replica: raise OpenMMWriterError, "Replica not assigned."
+        if not replica: raise OpenMMWriterError("Replica not assigned.")
         commands = self.getReplicaCommands(replica)
         open(outfile,'w').write('\n'.join(commands))
         ok = osp.exists(outfile)
@@ -252,7 +252,7 @@ class OpenMMWriter(object):
          :type replica: :class:`~Replicas.Replica`
         """
         replica = replica or self.replica
-        if not replica: raise OpenMMWriterError, "Replica not assigned."
+        if not replica: raise OpenMMWriterError("Replica not assigned.")
         
         T.BROWSER.gotoReplica(replica)
         
@@ -280,7 +280,7 @@ class OpenMMWriter(object):
             replica     (ReplicaInfo)   Replica instance
         """
         replica = replica or self.replica
-        if not replica: raise OpenMMWriterError, "Replica not assigned."
+        if not replica: raise OpenMMWriterError("Replica not assigned.")
         
         restr = ''
         if replica.hasRestraints: restr = self.restr
@@ -319,14 +319,14 @@ class OpenMMWriter(object):
 
     def writeReplicaInput(self, replica=False):
         replica = replica or self.replica
-        if not replica: raise OpenMMWriterError, "Replica not assigned."
+        if not replica: raise OpenMMWriterError("Replica not assigned.")
 
         self.log.info("Writing OpenMM simulation input files for replica %s ..."%(replica.name))
         cwd = T.BROWSER.cwd
         T.BROWSER.gotoReplica(replica)
 
         if not (osp.exists(replica.top) and osp.exists(replica.crd)): # and osp.exists(replica.pdb)):
-            raise OpenMMWriterError, "Replica top or crd files not found in current folder: %s, %s"%(replica.top, replica.crd)
+            raise OpenMMWriterError("Replica top or crd files not found in current folder: %s, %s")%(replica.top, replica.crd)
 
         substDict = {}
 
@@ -420,7 +420,7 @@ class OpenMMCheck(object):
     def checkMinimization(self, replica=False):
         "Check if minimization run correctly"
         replica = replica or self.replica
-        if not replica: raise OpenMMCheckError, "Replica not assigned."
+        if not replica: raise OpenMMCheckError("Replica not assigned.")
 
         # Move to replica path if not yet there
         T.BROWSER.gotoReplica(replica)
@@ -445,7 +445,7 @@ class OpenMMCheck(object):
         Returns: True or False
         """
         replica = replica or self.replica
-        if not replica: raise OpenMMCheckError, "Replica not assigned."
+        if not replica: raise OpenMMCheckError("Replica not assigned.")
         if not isinstance(stepselection, list): stepselection=[stepselection]
 
         # Check all equilibration steps (look for 'Total CPU time:')
@@ -470,7 +470,7 @@ class OpenMMCheck(object):
         :rtype: str or bool
         """
         replica = replica or self.replica
-        if not replica: raise OpenMMCheckError, "Replica not assigned."
+        if not replica: raise OpenMMCheckError("Replica not assigned.")
 
         # Move to replica path if not yet there
         T.BROWSER.gotoReplica(replica)
@@ -494,7 +494,7 @@ class OpenMMCheck(object):
         :rtype: str or bool
         """
         replica = replica or self.replica
-        if not replica: raise OpenMMCheckError, "Replica not assigned."
+        if not replica: raise OpenMMCheckError("Replica not assigned.")
 
         # Move to replica path if not yet there
         T.BROWSER.gotoReplica(replica)
@@ -516,7 +516,7 @@ class OpenMMCheck(object):
         Returns: True or False
         """
         replica = replica or self.replica
-        if not replica: raise OpenMMCheckError, "Replica not assigned."
+        if not replica: raise OpenMMCheckError("Replica not assigned.")
         if not isinstance(stepselection, list): stepselection=[stepselection]
 
         selection = stepselection or range(1, replica.ntrajfiles+1)
@@ -531,7 +531,7 @@ class OpenMMCheck(object):
         "Check in current folder min/ eq/ and md/ for N nanoseconds taken from project info\
          if 'returnsteps', don't evaluate and just return True or False for min, eq and md steps in a dictironary."
         replica = replica or self.replica
-        if not replica: raise OpenMMCheckError, "Replica not assigned."
+        if not replica: raise OpenMMCheckError("Replica not assigned.")
 
         stepsdone = {}
         stepsdone['min'] = self.checkMinimization(self.replica)
@@ -560,7 +560,7 @@ class OpenMMCheck(object):
         :return float Volume: Simulation volume.
         """
         replica = replica or self.replica
-        if not replica: raise AmberCheckError, "Replica not assigned."
+        if not replica: raise AmberCheckError("Replica not assigned.")
         
         boxextension = boxextension or 'rst'
         

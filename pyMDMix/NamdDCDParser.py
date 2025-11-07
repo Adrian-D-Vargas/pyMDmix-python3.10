@@ -51,7 +51,7 @@ class NamdDCDParser:
         @type  pdbCode: str
         @param log: LogFile instance [Biskit.StdLog]
         @type  log: Biskit.LogFile
-        @param verbose: print progress to log [0]
+        @param verbose: print(progress to log [0])
         @type  verbose: int
         """
         self.fdcd = T.absfile( fdcd )
@@ -87,7 +87,7 @@ class NamdDCDParser:
         # First read header information and check correct file format
         header = struct.unpack(">I 4s 9I f 11I", f.read(92))
         if header[0] == 84 and header[1] == 'CORD' and header[-1] == 84 and header[-2] != 0:
-            #print "recognized 32 bit DCD file of opposite endianness"
+            #print("recognized 32 bit DCD file of opposite endianness")
             #Store the number of sets of coordinates (NSET). Frames
             self.nset = header[2]
             #Store ISTART, the starting timestep
@@ -125,13 +125,13 @@ class NamdDCDParser:
             sys.exit("Bad DCD format")
         
         if verbose:
-            print self.title
-            print "Number of atoms:", self.natoms
-            print "Number of frames:",self.nset
-            print "Starting timestep", self.istart
-            print "Final timestep:", self.ntot
-            print "Steps between frames:", self.nsavc
-            print "Time step of simulation:", self.delta
+            print(self.title)
+            print("Number of atoms:"), self.natoms
+            print("Number of frames:"),self.nset
+            print("Starting timestep"), self.istart
+            print("Final timestep:"), self.ntot
+            print("Steps between frames:"), self.nsavc
+            print("Time step of simulation:"), self.delta
     
     def set_pointerInfo(self):
         """

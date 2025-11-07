@@ -29,7 +29,7 @@
 import logging
 import sys
 import os.path as osp
-import ConfigParser
+import configparser
 
 import settings as S
 from Solvents import SolventManager
@@ -54,8 +54,8 @@ class SystemConfigFileParser(object):
 
     def parse(self, configFile):
         "Parse all options in configFile"
-        if not osp.exists(configFile): raise BadFile, "File %s not found."%configFile
-        self.__configHandle = ConfigParser.ConfigParser()
+        if not osp.exists(configFile): raise BadFile("File %s not found.")%configFile
+        self.__configHandle = configparser.ConfigParser()
         self.__configHandle.read(configFile)
 
         ########################################################################
@@ -65,7 +65,7 @@ class SystemConfigFileParser(object):
         try:
             fileSection = dict(self.__configHandle.items('SYSTEM'))
         except:
-            raise SystemParserError, "Section SYSTEM missing."
+            raise SystemParserError("Section SYSTEM missing.")
 
         parms = {} # Store parameters to be passed to System
 
@@ -92,17 +92,17 @@ class SystemConfigFileParser(object):
                 if not osp.exists(off): 
                     # Try to find off in folder where config file is found
                     offpath = osp.join(osp.split(configFile)[0], off)
-                    if not osp.exists(offpath): raise BadFile, "Entry OFF pointing to file %s not found."%off
+                    if not osp.exists(offpath): raise BadFile("Entry OFF pointing to file %s not found.")%off
                     else: off = offpath
                 parms.update({'amberOFF':osp.abspath(off)})
 
             parms.update({'unitName':fileSection.get('uname')})
         elif pdb:
-            if not osp.exists(pdb): raise BadFile, "Entry PDB pointing to file %s not found."%pdb
+            if not osp.exists(pdb): raise BadFile("Entry PDB pointing to file %s not found.")%pdb
             parms.update({'amberPDB':osp.abspath(pdb)})
         elif top and crd:
             # Directly create Solvated system
-            if not osp.exists(top) or not osp.exists(crd): raise BadFile, "PRMTOP file %s or PRMCRD file %s not found."%(top,crd)
+            if not osp.exists(top) or not osp.exists(crd): raise BadFile("PRMTOP file %s or PRMCRD file %s not found.")%(top,crd)
             parms.update({'top':top, 'crd':crd})
 
         # Optional: specify extra residue names to keep in reference structure (useful for modified residues)
@@ -135,7 +135,7 @@ class MDSettingsConfigFileParser(object):
         "Check any of the solvent numbers given is diferent from de available ones"""
         available = SolventManager().listSolvents()
         missing = set(l) - set(available)
-        if missing: raise BadSolvent, "Solvent list invalid: %s"%missing
+        if missing: raise BadSolvent("Solvent list invalid: %s")%missing
         return True
 
     def __splitPerReplicaSlash(self, string, valControl=None, valFormat=str):
@@ -143,7 +143,7 @@ class MDSettingsConfigFileParser(object):
         if not string:
             # Empty field or not assigned Return None for each replica
             replInfo = {}
-            for solv, nrepl in self.solv_nrepl.iteritems():
+            for solv, nrepl in self.solv_nrepl.items():
                 replInfo[solv] = {}
                 for i in range(1, nrepl+1): replInfo[solv][i] = None
             return replInfo
@@ -164,7 +164,7 @@ class MDSettingsConfigFileParser(object):
                         sys.exit(1)
 
                     expectedNrepl = self.solv_nrepl[solv]
-                    if not tempD.has_key(solv): tempD[solv] = {}
+                    if not solv in tempD: tempD[solv] = {}
 
                     # repl can be empty if all replicas should be modified
                     # it can contain a single integer or
@@ -194,14 +194,14 @@ class MDSettingsConfigFileParser(object):
                 self.log.error("(__splitPerReplicaSlash) value '%s' not accepted. Possible values are: %s"%(value, valControl))
                 sys.exit(1)
             tempD['COMMON'] = value
-#            print 'Common',value
+#            print('Common'),value
 
         # Assign COMMON value to replicas not specified
         replInfo = {}
-        for solv, nrepl in self.solv_nrepl.iteritems():
+        for solv, nrepl in self.solv_nrepl.items():
             replInfo[solv] = {}
             for i in range(1, nrepl+1):
-                if tempD.has_key(solv) and tempD[solv].has_key(i):
+                if solv in tempD and tempD[solv].has_key(i):
                     replInfo[solv][i] = tempD[solv][i]
                 else:
                     cval = tempD.get('COMMON')
@@ -235,7 +235,7 @@ class MDSettingsConfigFileParser(object):
             if solv in temp_replInfo.keys():
                 replInfo[solv] = temp_replInfo[solv]
             else:
-                if not common: raise MDSettingsParserError, "Common value not given in differential assignment and solvent %s cannot be assigned"%solv
+                if not common: raise MDSettingsParserError("Common value not given in differential assignment and solvent %s cannot be assigned")%solv
                 replInfo[solv] = common
         return replInfo
 
@@ -252,8 +252,8 @@ class MDSettingsConfigFileParser(object):
 
         settingsInstances = []
 
-        if not osp.exists(configfile): raise BadFile, "Config file does not exist: %s"%configfile
-        self.__configHandle = ConfigParser.ConfigParser()
+        if not osp.exists(configfile): raise BadFile("Config file does not exist: %s")%configfile
+        self.__configHandle = configparser.ConfigParser()
         self.__configHandle.read(configfile)
 
         #################################################################
@@ -264,14 +264,14 @@ class MDSettingsConfigFileParser(object):
         sections = self.__configHandle.sections()
         mdsections = [s for s in sections if s.startswith('MDSETTINGS')]
         nummdsections = len(mdsections)
-        if not nummdsections: raise MDSettingsParserError, "No sections found starting with MDSETTINGS name."
+        if not nummdsections: raise MDSettingsParserError("No sections found starting with MDSETTINGS name.")
 
         # Visit all mdsettings sections
         for section in mdsections:
             fileSection = dict(self.__configHandle.items(section))
 
             solvents = fileSection.get('solvents') or fileSection.get('solvent')
-            if not solvents: raise MDSettingsParserError, "SOLVENT(S) option missing in replica config file."
+            if not solvents: raise MDSettingsParserError("SOLVENT(S) option missing in replica config file.")
             solvents = [el.strip() for el in solvents.split(',')]
             self.__checkSolventList(solvents)
             self.solvents = solvents
@@ -331,7 +331,7 @@ class MDSettingsConfigFileParser(object):
             m.collectSettings()
             settingKeys = m.settings2dict().keys()
             extracfg = {}
-            for k,v in fileSection.iteritems():
+            for k,v in fileSection.items():
                 if v is None: continue
                 if k in mainopts: continue
                 # Will try to do fuzzy comparison to identify what config parameter should be modified
@@ -340,9 +340,9 @@ class MDSettingsConfigFileParser(object):
                 if bestmatch:
                     setting = m.settings[bestmatch[0]]
                     extracfg.update({setting.name:setting.vtype(v)})
-                else: raise MDSettingsParserError, "Attribute %s not present in md-settings. Make sure the spelling is correct"%k
+                else: raise MDSettingsParserError("Attribute %s not present in md-settings. Make sure the spelling is correct")%k
 
-            for solv, nrepl in self.solv_nrepl.iteritems():
+            for solv, nrepl in self.solv_nrepl.items():
                 for i in range(1, nrepl+1):
                     replicaRestrMode = splitedRestr[solv][i]
                     replicaRestrForce = splitedForce[solv][i]
@@ -365,8 +365,8 @@ class MDSettingsConfigFileParser(object):
         import SettingsParser as P
         import difflib
 
-        if not osp.exists(configfile): raise BadFile, "Config file does not exist: %s"%configfile
-        self.__configHandle = ConfigParser.ConfigParser()
+        if not osp.exists(configfile): raise BadFile("Config file does not exist: %s")%configfile
+        self.__configHandle = configparser.ConfigParser()
         self.__configHandle.read(configfile)
 
         #################################################################
@@ -377,7 +377,7 @@ class MDSettingsConfigFileParser(object):
         sections = self.__configHandle.sections()
         mdsections = [s for s in sections if s.startswith('MDSETTINGS')]
         nummdsections = len(mdsections)
-        if not nummdsections: raise MDSettingsParserError, "No sections found starting with MDSETTINGS name."
+        if not nummdsections: raise MDSettingsParserError("No sections found starting with MDSETTINGS name.")
 
         # Visit all mdsettings sections
         for section in mdsections:
@@ -404,7 +404,7 @@ class MDSettingsConfigFileParser(object):
             m.collectSettings()
             settingKeys = m.settings2dict().keys()
             extracfg = {}
-            for k,v in fileSection.iteritems():
+            for k,v in fileSection.items():
                 if v is None: continue
                 if k in mainopts: continue
                 # Will try to do fuzzy comparison to identify what config parameter should be modified
@@ -413,7 +413,7 @@ class MDSettingsConfigFileParser(object):
                 if bestmatch:
                     setting = m.settings[bestmatch[0]]
                     extracfg.update({setting.name:setting.vtype(v)})
-                else: raise MDSettingsParserError, "Attribute %s not present in md-settings. Make sure the spelling is correct"%k
+                else: raise MDSettingsParserError("Attribute %s not present in md-settings. Make sure the spelling is correct")%k
 
             return MDSettings.MDSettings(nanos=nanos, restrMode=restr,
                             restrForce=force, temp=temp, restrMask=restrMask, 

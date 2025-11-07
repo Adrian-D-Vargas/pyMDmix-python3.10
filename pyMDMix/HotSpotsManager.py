@@ -86,7 +86,7 @@ class HotSpot(object):
         if energymethod in valmethods:
             self.energymethod = energymethod
         else:
-            raise AttributeError, "Wrong energy averaging method. Valid methods are: %s"%valmethods
+            raise AttributeError("Wrong energy averaging method. Valid methods are: %s")%valmethods
         
         # Calculate volume element from spacing
         self.spacing = spacing
@@ -202,7 +202,7 @@ class HotSpot(object):
                 probabilities = npy.exp(self.energyList/-RT)
                 probabilities = probabilities/probabilities.sum()
                 self.coord = npy.average(self.coordList, axis=0, weights=probabilities)
-                #print probabilities
+                #print(probabilities)
             
             # Other properties
             self.npoints = len(self.coordList)
@@ -462,7 +462,7 @@ class HotSpotSet(object):
         """
         import Biskit as bi
         if not isinstance(pdb, bi.PDBModel):
-            raise AttributeError, "pdb argument should be a Biskit.PDBModel instance"
+            raise AttributeError("pdb argument should be a Biskit.PDBModel instance")
 
         mask = pdb['serial_number'] == atomnumber
         atomcoord = pdb.xyz[mask][0]
@@ -578,7 +578,7 @@ class HotSpotMultipleSet(HotSpotSet):
             if not isinstance(hsetlist, list): hsetlist = [hsetlist]
             for hi, hset in enumerate(hsetlist):
 #                if not isinstance(hset, HotSpotSet): 
-#                    raise HotSpotMultipleSetError, "Error adding %s. This should be a HotSpotSet object."%hset
+#                    raise HotSpotMultipleSetError("Error adding %s. This should be a HotSpotSet object.")%hset
                 
                 # Assign type from typelist if present or keep from HotSpotSet.probe attribute
                 if probelist: hset.probe = probelist[hi]
@@ -596,11 +596,11 @@ class HotSpotMultipleSet(HotSpotSet):
         :arg combinedHSet: Hot Spot set with combined hotspots from different probes/types.
         :type combinedHset: :class:`HotSpotSet`
         :arg dict proberesmap: Map probe names in combinedHset with residue names you wish to appear in the PDB. Default: HOT.
-        :arg dict probeatommap: Map probe names to atom names to print in the pdb. Default: C.
+        :arg dict probeatommap: Map probe names to atom names to print(in the pdb. Default: C.)
         :arg bool onlycenter: Write only the hotspot minimum energy point. Write all hotspot points if False (default).
         """
         combinedHset = combinedHset or self.combinedhset
-        if not combinedHset: raise HotSpotMultipleSetError, "No combined HSet saved or given as argument"
+        if not combinedHset: raise HotSpotMultipleSetError("No combined HSet saved or given as argument")
         self.sortCombinedHSet(combinedHset)
         
          # Write a PDB for each point found
@@ -690,7 +690,7 @@ class CreateHotSpotSet(object):
         elif isinstance(grid, Grid):
             self.grid = grid
         else:
-            raise AttributeError, "grid argument should be an existing filename or a Grid instance"
+            raise AttributeError("grid argument should be an existing filename or a Grid instance")
 
         self.hotspotset = None
         self.info = info
@@ -838,15 +838,15 @@ class createByCutoff(CreateHotSpotSet):
         # Cluster by cutdistance
         t0=time.time()
         self.log.debug("Clustering %d points..."%len(coords))
-#        print "Building DM"
+#        print("Building DM")
         self.dm = distance.pdist(coords)
-#        print "Linkage and fcluster"
+#        print("Linkage and fcluster")
         self.linkage = hierarchy.linkage(self.dm)
         self.clusterIndexes = hierarchy.fcluster(self.linkage, t=self.cutdistance, criterion='distance')
         self.uClusterIds = npy.unique(self.clusterIndexes)
         self.nclusters = self.uClusterIds.size
 
-#        print self.clusterIds, npy.min(self.clusterIds). npy.max(self.clusterIds)
+#        print(self.clusterIds, npy.min(self.clusterIds). npy.max(self.clusterIds))
 
         # Create a hotspot for each cluster
         results = []
@@ -904,23 +904,23 @@ class HotSpotsManager(object):
 
     def saveHotSpot(self, picklefileout, hotspot):
         "Save into pickle the hotspot"
-        import cPickle
-        cPickle.dump(hotspot, open(picklefileout, 'wb'))
+        import pickle
+        pickle.dump(hotspot, open(picklefileout, 'wb'))
 
     def saveHotSpotSet(self, picklefileout, hset=False):
         "Save into pickle the hotspotset found"
-        import cPickle
+        import pickle
         if hset:
-            cPickle.dump(hset, open(picklefileout, 'wb'))
+            pickle.dump(hset, open(picklefileout, 'wb'))
         elif not hset and self.hotspotSet:
-            cPickle.dump(self.hotspotSet, open(picklefileout, 'wb'))
+            pickle.dump(self.hotspotSet, open(picklefileout, 'wb'))
         else:
             self.log.error("No hotspotSet stored in HotSpotsManager and no HSet given. Cannot save anything.")
         
     def loadHotSpotSet(self, picklefilein):
         "Load previously saved hotspots from pickle file"
-        import cPickle
-        self.hotspotSet = cPickle.load(open(picklefilein, 'rb'))
+        import pickle
+        self.hotspotSet = pickle.load(open(picklefilein, 'rb'))
 
     def writeHotSpotSetPDB(self, outpdbfile, hset=False, **kwargs):
         # Write a PDB for each point found

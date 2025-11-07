@@ -72,7 +72,7 @@ class Residence_Worker(multiprocessing.Process):
         self.mapResIDToResName = mapResIDToResName
         self.trackResNames = trackResNames
         self.results = results
-#        print 'thread dict id %d'%(id(self.results))
+#        print('thread dict id %d')%(id(self.results))
         self.lock = lock
 
     def run(self):
@@ -105,12 +105,12 @@ class Residence_Worker(multiprocessing.Process):
                         # Noone of the ids is a tracked residue. Add a zero!
                         resids = npy.array([0])
                 self.results.update({framenum:resids.tolist()})
-#                    print id(self.results)
+#                    print(id(self.results))
             else:
                 # Not occupied
 #                with self.lock: 
                 self.results.update({framenum:[0]})
-#                print "Added frame %d to results. empty."%framenum
+#                print("Added frame %d to results. empty.")%framenum
         return self.results
 
 class Residence(object):
@@ -141,7 +141,7 @@ class Residence(object):
             Read calcResults() documentation for returning dict format.
         """
         self.log = logging.getLogger("Residence")
-        if not isinstance(replica, pyMDMix.Replica): raise DensityError, "replica argument of wrong type."
+        if not isinstance(replica, pyMDMix.Replica): raise DensityError("replica argument of wrong type.")
         self.replica= replica
         self.pdb = replica.getPDB()
         self.parallel = parallel
@@ -157,7 +157,7 @@ class Residence(object):
 
         # Algned trajetory is needed
         if not replica.isAligned(stepselection):
-            raise ResidenceError, "Cannot calculate residence plots over non-aligned trajectory"
+            raise ResidenceError("Cannot calculate residence plots over non-aligned trajectory")
 
         self.setup()
 
@@ -175,9 +175,9 @@ class Residence(object):
                 self.hotspot_coords = self.hotspot.coordList
                 self.log.info("Residence: Tracking occupancy of hotspot %s"%self.hotspot)
             else:
-                raise ResidenceError, "Wrong 'hotspot' argument type"
+                raise ResidenceError("Wrong 'hotspot' argument type")
         else:
-            raise ResidenceError, "Hotspot+tolerance or Spherecenter+tolerance must be given."
+            raise ResidenceError("Hotspot+tolerance or Spherecenter+tolerance must be given.")
 
         # Print info
         self.log.info("Residence: Resnames to track: %s"%self.trackResNames)
@@ -246,7 +246,7 @@ class Residence(object):
         finalmap = {}
         for i,idx in enumerate(allids):
             name = resnames[i]
-            if not finalmap.has_key(name): finalmap[name] = []
+            if not name in finalmap: finalmap[name] = []
             finalmap[name].append(idx)
         
         # Write map to first lines in file preceded with a #
@@ -254,7 +254,7 @@ class Residence(object):
         if self.trackResNames: out.write(". Tracked residues: %s\n"%self.trackResNames)
         else: out.write('\n')
         out.write("# RESNAME-RESID MAP\n")
-        for k, v in finalmap.iteritems(): out.write("# %s = %s\n"%(k, ','.join(map(str,v))))
+        for k, v in finalmap.items(): out.write("# %s = %s\n"%(k, ','.join(map(str,v))))
         out.write("# DATA\n")
         
         # Finally write frames and ids
@@ -299,6 +299,6 @@ def Residence_postprocess(results, replica, **kwargs):
     plot.plotResidenceResults(results, outfilename='residence.png', **kwargs)
 #    replica.go()
 #    if not osp.exists(replica.densityfolder): os.mkdir(replica.densityfolder)
-#    for probe, grid in results.iteritems():
+#    for probe, grid in results.items():
 #        grid.writeDX(osp.join(replica.folder, probe+'.dx'))
     pyMDMix.browser.goback()

@@ -33,13 +33,13 @@ Example::
     >>> f_in = osp.join(T.testRoot(), 'ETAWAT20.off')
     >>> m = O.OFFManager(offFile=f_in)
     >>>
-    >>> print m.getUnits() # Get unit names present in the OFF file
+    >>> print(m.getUnits() # Get unit names present in the OFF file)
     ['ETA','ETAWAT20','WAT']
-    >>> print m.getResidueList('ETAWAT20', unique=True) # Get residues inside unit 'ETAWAT20'
+    >>> print(m.getResidueList('ETAWAT20', unique=True) # Get residues inside unit 'ETAWAT20')
     ['WAT','ETA']
-    >>> print m.getVolume('ETAWAT20') # Volume of the box
+    >>> print(m.getVolume('ETAWAT20') # Volume of the box)
     7988.43038
-    >>> print m.getNumRes('ETAWAT20', 'ETA') # Number of 'ETA' residues inside 'ETAWAT20' unit.
+    >>> print(m.getNumRes('ETAWAT20', 'ETA') # Number of 'ETA' residues inside 'ETAWAT20' unit.)
     17
 
 
@@ -79,11 +79,11 @@ class OFFManager(object):
         
         if offFile:
             if osp.exists(offFile): self.off = open(offFile, 'r').read()
-            else: raise OFFManagerError, "Object File %s not found"%offFile
+            else: raise OFFManagerError("Object File %s not found")%offFile
         elif offString:
             self.off = offString
         else:
-            raise OFFManagerError, "offFile or offString are needed for initializing instance."
+            raise OFFManagerError("offFile or offString are needed for initializing instance.")
 
     def __iterOff(self):
         "Returns the file as an iterable list"
@@ -258,7 +258,7 @@ class OFFManager(object):
         line = off.next()
         while line and not search in line:
             line = off.next()
-        if not line: raise OFFSectionError, "Section %s for unit %s not in file."%(section, unit)
+        if not line: raise OFFSectionError("Section %s for unit %s not in file.")%(section, unit)
 
         out = []
         if with_header: out.append(line)

@@ -51,7 +51,7 @@ any of the options given as parameter, the attibutes from the settings file are 
     >>>
     >>> # Applying restraints over heavy atoms (HA) over all protein residues (automatic mask) with a force of 0.1 kcal/mol.A^2
     >>> restrainedReplica = R.Replica('MAM', name='restrainTest', restrMode='HA', restrForce=0.1)
-    >>> print restrainedReplica
+    >>> print(restrainedReplica)
     REPLICA INFORMATION:
     -------------
     Replica name: restrainTest
@@ -133,7 +133,7 @@ class MDSettings(object):
         # ONLY ADOPT NOT DEFINED IN KWARGS
         m = self.__getSettings()
         settingKeys = m.settings2dict().keys()
-        for k,v in kwargs.iteritems():
+        for k,v in kwargs.items():
             if v is None: continue
             if k in settingKeys: setattr(self, k, v)
             else:
@@ -141,7 +141,7 @@ class MDSettings(object):
                 # to give some flexibility to the user (specially for case matching
                 bestmatch = difflib.get_close_matches(k, settingKeys, 1, 0.8)
                 if bestmatch: setattr(self, bestmatch[0], v)
-                else: print >> sys.stderr, "Attribute %s not in md-settings. skipping..."%k
+                else: print(>> sys.stderr, "Attribute %s not in md-settings. skipping..."%k)
         m.updateNamespace(self.__dict__, keepdefined=True)
 
         # Set name (automatic name if not given)
@@ -209,7 +209,7 @@ def parseSettingsConfigFile(settingsConfigFile, noSolvent=False):
     import os.path as osp
     from Parsers import MDSettingsConfigFileParser
     
-    if not osp.exists(settingsConfigFile): raise BadFile, "File %s not found."%settingsConfigFile
+    if not osp.exists(settingsConfigFile): raise BadFile("File %s not found.")%settingsConfigFile
     if noSolvent: sets = MDSettingsConfigFileParser().parseNoSolvent(settingsConfigFile)
     else: sets = MDSettingsConfigFileParser().parse(settingsConfigFile)
     return sets

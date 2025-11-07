@@ -137,7 +137,7 @@ class Align(object):
         path = osp.join(self.replica.path, self.replica.alignfolder)
         # Check input file exists
         if not osp.exists(osp.join(path,inf)):
-            raise AlignError, "File %s does not exists in alignment folder of replica %s"%(inf, self.replica.name)
+            raise AlignError("File %s does not exists in alignment folder of replica %s")%(inf, self.replica.name)
         
         outf= inf.replace('.ptraj','_ptraj.log')
         top = os.pardir+os.sep+self.replica.top
@@ -219,4 +219,4 @@ class Align(object):
 
 
 if __name__ == "__main__":
-    print "Hello World"
+    print("Hello World")

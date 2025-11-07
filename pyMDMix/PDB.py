@@ -98,7 +98,7 @@ class SolvatedPDB(bi.PDBModel):
             dbsolvents = [man.getSolvent(s) for s in man.listSolvents()]
             solvresnames = dict([(s.name, map(repr,s.residues)) for s in dbsolvents])
             possible = []
-            for sol, res in solvresnames.iteritems():
+            for sol, res in solvresnames.items():
                 if set(res) == resnames: possible.append(sol)
 
             if not possible:
@@ -155,7 +155,7 @@ class SolvatedPDB(bi.PDBModel):
         "Iterate over requested residues coordinates"
         if not self.resMasks: self.__prepareSolventResMasks()
         masks = self.resMasks.get(residuename)
-        if not npy.any(masks): raise SolvatedPDBError, "Invalid residue name %s. Residue not in solvent %s."%(residuename,self.solvent.name)
+        if not npy.any(masks): raise SolvatedPDBError("Invalid residue name %s. Residue not in solvent %s.")%(residuename,self.solvent.name)
         for m in masks:
                 yield self.xyz[m]
 
@@ -167,7 +167,7 @@ class SolvatedPDB(bi.PDBModel):
             return self.xyz[masks]
         else:
             # Not normal probe, may be a COM probe?
-            if not probename in self.solvent.comprobes.keys(): raise SolvatedPDBError, "Invalid probe name %s. Probe not in solvent %s."%(probename, self.solvent.name)
+            if not probename in self.solvent.comprobes.keys(): raise SolvatedPDBError("Invalid probe name %s. Probe not in solvent %s.")%(probename, self.solvent.name)
             else:
                 # Its a com probe, determine residue and 
                 # Fetch COM coordinates

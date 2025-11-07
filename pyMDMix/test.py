@@ -64,7 +64,7 @@ class PyMDMixTestLoader( BiskitTestLoader ):
 ############################################
 
 def _use( defaults ):
-    print """
+    print("")"
 Run unittest tests for pyMDMix.
 
     test.py [-i |include tag1 tag2..| -e |exclude tag1 tag2..|
@@ -95,7 +95,7 @@ Examples:
 Default options:
 """
     for key, value in defaults.items():
-        print "\t-",key, "\t",value
+        print("\t-"),key, "\t",value
 
     sys.exit(0)
 
@@ -151,10 +151,10 @@ if __name__ == '__main__':
 
 
     for package in o['p']:
-        print 'collecting ', repr( package )
+        print('collecting '), repr( package )
         l.collectTests( module=package )
 
     l.run( dry=o['dry'] )
     l.report()
 
-    print "DONE"
+    print("DONE")

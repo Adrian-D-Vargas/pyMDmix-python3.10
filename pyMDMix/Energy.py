@@ -87,7 +87,7 @@ class EnergyConversion(object):
         numres = pdb.getNumResidues()
         unitnum = numres.get(unit)
         refnum = numres.get(refunit)
-        if not unitnum or not refnum: raise EnergyConversionError, "Unit %s or refunit %s not found in pdb %s"%(unit, refunit, pdb.source)
+        if not unitnum or not refnum: raise EnergyConversionError("Unit %s or refunit %s not found in pdb %s")%(unit, refunit, pdb.source)
         return refnum/float(unitnum)
 
     def calcReplicaExpectedValue(self, replica, probe, numsnaps=False, stepselection=[], gridspacing=S.GRID_SPACING):
@@ -105,7 +105,7 @@ class EnergyConversion(object):
         if probe in solv.comprobes.keys(): unit = solv.comprobes[probe].name
         elif probe in solv.probelist: unit = solv.getProbeByName(probe).residue.name
         else:
-            raise EnergyConvertError, "Probe %s not found for solvent in replica %s"%(probe, replica.name)
+            raise EnergyConvertError("Probe %s not found for solvent in replica %s")%(probe, replica.name)
 
         # Calculate ratio-correction factor
         if len(solv.residues) > 1:
@@ -191,7 +191,7 @@ class EnergyConversion(object):
         # Fetch probability
         sm = SM()
         solv = sm.fetchSolventByProbe(probename)
-        if not solv: raise EnergyConversionError, "Probename %s not found."%probename
+        if not solv: raise EnergyConversionError("Probename %s not found.")%probename
         prob = solv.getProbeProbability(probename)
 
         # Convert
@@ -221,7 +221,7 @@ class EnergyConversion(object):
         solvents = []
         probes = []
         for r in replicalist:
-            if not isinstance(r, Replica): raise EnergyConversionError, "Wrong type %s. Expected Replica type."%type(r)
+            if not isinstance(r, Replica): raise EnergyConversionError("Wrong type %s. Expected Replica type.")%type(r)
             solvents.append(r.solvent)
             probes.extend(r.getProbes())
 
@@ -231,11 +231,11 @@ class EnergyConversion(object):
 
         # If averaging, all replicas must be of same solvent
         if len(set(solvents)) > 1 and average:
-            raise EnergyConversionError, "Cannot average grids from replicas run with different solvents: %s"%replnames
+            raise EnergyConversionError("Cannot average grids from replicas run with different solvents: %s")%replnames
 
         # Check probes
         if probelist and not set(probelist) < set(probes):
-            raise EnergyConversionError, "Some selected probes are not found in replica list: %s"%list((set(probelist) - set(probes)))
+            raise EnergyConversionError("Some selected probes are not found in replica list: %s")%list((set(probelist) - set(probes)))
         if not probelist: probelist = list(set(probes))
 
         # set empty outprefix if not given
@@ -328,7 +328,7 @@ class EnergyConversion(object):
             for replica in replicalist:
                 self.log.info("Converting grids for replica %s"%replica.name)
                 grids = allgrids[replica.name]['MDMIX_DENS']
-                for probe, g in grids.iteritems():
+                for probe, g in grids.items():
                     if probe in probelist:
                         self.log.info("Probe %s..."%probe)
                         # Convert counts to DG
@@ -365,4 +365,4 @@ class EnergyConversion(object):
 
 
 if __name__ == "__main__":
-    print "Hello World"
+    print("Hello World")

@@ -78,7 +78,7 @@ class QueueInputWriter(object):
                         if n == self.queue: self.templfile = f
 
             # If still no template found, raise QueueInputError
-            if not self.templfile: raise QueueInputError, "No template file for queue name %s"%self.queue
+            if not self.templfile: raise QueueInputError("No template file for queue name %s")%self.queue
 
         self.template = open(self.templfile,'r').read()
 
@@ -102,7 +102,7 @@ class QueueInputWriter(object):
     def write(self, replica=None, queuename='', **kwargs):
         "Write queue input files for replica *replica*"
         if not replica: replica=self.replica
-        if not replica: raise QueueInputError, "Replica not set"
+        if not replica: raise QueueInputError("Replica not set")
 
         # CWD
         cwd = T.BROWSER.getcwd()
@@ -118,7 +118,7 @@ class QueueInputWriter(object):
             from OpenMM import OpenMMWriter
             writer = OpenMMWriter(replica)
         else:
-            raise QueueInputError, "Replica has unknown mdProgram attribute: %s"%replica.mdProgram
+            raise QueueInputError("Replica has unknown mdProgram attribute: %s")%replica.mdProgram
 
         # start writing files
         # MINIMIZATION
@@ -175,4 +175,4 @@ def listQueueSystems():
     return list(set(qsys))
 
 if __name__ == "__main__":
-    print "Hello World"
+    print("Hello World")

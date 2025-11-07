@@ -40,7 +40,7 @@ __date__ ="$16-ene-2014 19:28:13$"
 import logging
 import os
 import os.path as osp
-import ConfigParser
+import configparser
 import tools as T
 import string
 
@@ -69,7 +69,7 @@ class WriteCfgError(SettingsError):
     pass
 
 
-class CaseSensitiveConfigParser( ConfigParser.SafeConfigParser ):
+class CaseSensitiveConfigParser( configparser.ConfigParser ):
     """
     Change ConfigParser so that it doesn't convert option names to lower case.
     """
@@ -109,8 +109,8 @@ class Setting(object):
                 else:
                     self.value = vtype( self.value )
             self.vtype = vtype
-        except ValueError, e:
-            raise InvalidValue, '%s: cannot convert "%s" to %r.' %\
+        except ValueError as e:
+            raise InvalidValue('%s: cannot convert "%s" to %r.') %\
               (self.name,self.value,vtype)
 
     def __repr__( self, tab='' ):
@@ -208,10 +208,10 @@ class SettingsParser(object):
                 t = eval( s )
 
                 if not type(t) is type:
-                    raise TypeError, '%s is not a valid type' % s
+                    raise TypeError('%s is not a valid type') % s
 
-            except Exception, e:
-                raise TypeError, 'Cannot extract type from %s: %r'\
+            except Exception as e:
+                raise TypeError('Cannot extract type from %s: %r')\
                       % option, e
 
         return t, o
@@ -252,7 +252,7 @@ class SettingsParser(object):
             if section == Setting.BIN:
                 r.value = T.validBinary( r.value )
 
-        except SettingsWarning, e:           ## catch and record warnings
+        except SettingsWarning as e:           ## catch and record warnings
             r.error = str(e)
 
         return r
@@ -296,15 +296,15 @@ class SettingsParser(object):
             c = CaseSensitiveConfigParser()
 
             if c.read( self.f_ini ) != [ self.f_ini ]:
-                raise IOError, 'Settings file %s not found.' % self.f_ini
+                raise IOError('Settings file %s not found.') % self.f_ini
 
             for section in c.sections():
                 res = self.__processSection( c.items(section), section)
                 if keepsections: self.result.update({section:res})
                 else: self.result.update(res)
 
-        except ConfigParser.Error, e:
-            raise InvalidFile, 'Error parsing settings file %s: ' %\
+        except configparser.Error as e:
+            raise InvalidFile('Error parsing settings file %s: ') %\
                   self.f_ini + str(e)
 
         return self.result
@@ -450,7 +450,7 @@ class SettingsManager(object):
                 puser = SettingsParser( self.fuser )
                 cuser = puser.parse()
 
-            except IOError, e:
+            except IOError as e:
                 if self.verbose: self.log.warning(
                     'Could not find file with user-defined settings in %s' \
                     % self.fuser)
@@ -459,10 +459,9 @@ class SettingsManager(object):
 
             self.settings = self.__update( cdefault, cuser )
 
-        except SettingsError, e:
+        except SettingsError as e:
             self.log.error( str(e) )
-            raise SettingsError, str(e)
-
+            raise SettingsError(str(e))
 
     def writeUserSettings( self, errorsonly=False ):
         """
@@ -508,9 +507,8 @@ class SettingsManager(object):
 
             f.close()
 
-        except OSError, e:
-            raise WriteCfgError, e
-
+        except OSError as e:
+            raise WriteCfgError(e)
     def settings2dict( self ):
         """
         Create dictionary from settings.
@@ -543,7 +541,7 @@ class SettingsManager(object):
 
         d = self.settings2dict()
 
-        if keepdefined: ns.update((k,v) for (k,v) in d.iteritems() if k not in ns.keys())
+        if keepdefined: ns.update((k,v) for (k,v) in d.items() if k not in ns.keys())
         else: ns.update(d)
 
 
@@ -577,14 +575,14 @@ class Test(BT.BiskitTest):
         self.f_out = ''
         f_in = osp.join(T.templatesRoot(),'solvent_template.cfg')
         parser = SettingsParser(f_in)
-        print parser.parse()
+        print(parser.parse())
         parser.result = {}
-        print parser.parse(keepsections=True)
+        print(parser.parse(keepsections=True))
         
     def cleanUp(self):
         if self.f_out: T.tryRemove( self.f_out, tree=1 )
 
 
 if __name__ == '__main__':
-    print "testing"
+    print("testing")
     BT.localTest()

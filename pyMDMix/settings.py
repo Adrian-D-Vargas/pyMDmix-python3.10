@@ -65,7 +65,7 @@ Summary for all
 import os
 import sys
 import logging
-import user
+import os
 import os.path as osp
 import tools as T
 import SettingsParser as P
@@ -84,7 +84,7 @@ if not rootlog.handlers:
 
 # USER MDMIX HOME
 # change this to mdmix package data folder
-#USER_MDMIX_HOME = osp.join(user.home, '.mdmix')
+#USER_MDMIX_HOME = osp.join(os.path.expanduser("~"), '.mdmix')
 USER_MDMIX_HOME = osp.join(osp.dirname(__file__), 'data')
 
 # Parse settings from package defaults and user defined
@@ -93,7 +93,7 @@ __CFG_USER    = osp.join(USER_MDMIX_HOME,'settings.cfg')
 try:
     m = P.SettingsManager(__CFG_DEFAULT, __CFG_USER, createmissing=True  )
     m.updateNamespace( locals() )
-except Exception, why:
+except Exception as why:
     raise P.SettingsError, 'Error importing pyMDMix settings: %s'%why
 
 ## REPLICA DEFAULTS PATHS
@@ -102,7 +102,7 @@ CFG_MD_USER    = osp.join(USER_MDMIX_HOME,'md-settings.cfg')
 try:
     m = P.SettingsManager(CFG_MD_DEFAULT, CFG_MD_USER, createmissing=True  )
     m.updateNamespace( {} )
-except Exception, why:
+except Exception as why:
     raise P.SettingsError, 'Error importing pyMDMix MD default settings: %s'%why
 
 
@@ -196,7 +196,7 @@ def setLogger(level=None, logFile=None):
 
     if not level: level = 'INFO'
     if level.upper() not in LOGLEVEL.keys():
-        raise KeyError, "%s level not valid. Valid names: %s"%(level.upper(),LOGLEVEL.keys())
+        raise KeyError("%s level not valid. Valid names: %s")%(level.upper(),LOGLEVEL.keys())
 
     rootlog = logging.getLogger()
     rootlog.setLevel(level.upper())
@@ -223,5 +223,5 @@ del __defff, __ffok, root, dirs, files
 del rootlog, os, osp, logging, testparam, Browser
 
 if __name__ == '__main__':
-    for k, v in locals().iteritems():
-        print k, v
+    for k, v in locals().items():
+        print(k, v)
