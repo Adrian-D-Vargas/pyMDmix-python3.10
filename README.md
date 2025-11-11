@@ -15,7 +15,7 @@ This repository contains pyMDMix migrated from Python 2.7 to Python 3.10.
 - Biskit dependency replaced with compatibility module
 - Full validation passed
 
-See [MIGRATION_SUMMARY.md](MIGRATION_SUMMARY.md) for details.
+See [migration_tools/MIGRATION_SUMMARY.md](migration_tools/MIGRATION_SUMMARY.md) for details.
 
 DOCUMENTATION
 =============
@@ -59,14 +59,23 @@ conda env config vars set AMBERHOME=$CONDA_PREFIX/envs/mdmix-env
 pip install .
 ```
 
-3 - Testing
------------
+3 - Testing & Validation
+------------------------
 
-You can test the package has been successfuly installed by activating
-the environment and, from a folder other than the cloned repository, running
-`python -m pyMDMix`
-if everything went fine, you will see something like
-`Welcome to MDMix 2.6`
+After installation, validate that pyMDMix works correctly:
+
+```bash
+# Quick validation
+python validate_installation.py
+
+# Or test manually
+python -c "import pyMDMix; print('✅ pyMDMix imported successfully')"
+
+# Run the module
+python -m pyMDMix
+```
+
+For comprehensive testing, see scripts in `migration_tools/` directory.
 
 The main script should have been installed correclty also. check it by running
 `mdmix -h`
