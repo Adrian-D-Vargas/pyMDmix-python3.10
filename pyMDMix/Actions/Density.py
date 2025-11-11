@@ -33,14 +33,14 @@ import os.path as osp
 import logging
 import tempfile
 import numpy as npy
-from . import biskit_compat as bi
+from .. import biskit_compat as bi
 
 import multiprocessing
 
 import pyMDMix
 import pyMDMix.tools as T
 from pyMDMix.GridsManager import NewGrid
-from .pyMDMix import settings as S
+from .. import settings as S
 
 class DensityError(Exception):
     pass
