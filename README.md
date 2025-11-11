@@ -1,7 +1,21 @@
 ## pyMDMix --- http://mdmix.sourceforge.net
 
+🎉 **This version has been migrated to Python 3.10!** 🎉
+
 The program is distributed under GNU GPLv3 license. Find the license file
 under Licenses/ folder.
+
+## 🐍 Python 3.10 Migration
+
+This repository contains pyMDMix migrated from Python 2.7 to Python 3.10.
+
+**Migration Status**: ✅ **COMPLETED** (Nov 10, 2025)
+- All syntax updated to Python 3.10
+- All imports modernized
+- Biskit dependency replaced with compatibility module
+- Full validation passed
+
+See [MIGRATION_SUMMARY.md](MIGRATION_SUMMARY.md) for details.
 
 DOCUMENTATION
 =============
@@ -14,10 +28,14 @@ INSTALLATION
 1- Dependencies
 ---------------
 This version of pyMDMix depends on:
-  - ambertools>=12
-  - python>=2.7
+  - **Python >= 3.10**
+  - ambertools >= 12
+  - numpy, scipy, matplotlib
+  - netCDF4
+  - biopython
+  - griddataformats
 
-make sure ambertools environment variables are set
+Make sure ambertools environment variables are set
 
 2 - Installation process
 ------------------------
