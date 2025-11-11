@@ -1,21 +1,51 @@
-FROM ggutierrezbio/ambertools20
-ARG CONDA_PREFIX="/opt/SOFT/miniconda3"
-ENV PATH="$CONDA_PREFIX/bin:${PATH}"
-ARG PATH="$CONDA_PREFIX/bin:${PATH}"
+# pyMDMix Docker Image - Python 3.10
+# Based on mambaorg/micromamba for faster package installation
+FROM mambaorg/micromamba:1.5.8
 
-SHELL [ "/bin/bash", "--login", "-c" ]
-RUN apt-get update && apt-get install -y wget git && rm -rf /var/lib/apt/lists/*
+# Metadata
+LABEL maintainer="pyMDMix Contributors"
+LABEL description="pyMDMix - Molecular Dynamics with Mixed Solvents (Python 3.10)"
+LABEL version="3.10"
 
-RUN wget \
-    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
-    && bash Miniconda3-latest-Linux-x86_64.sh -b -p $CONDA_PREFIX \
-    && rm -f Miniconda3-latest-Linux-x86_64.sh 
-RUN conda --version
+USER root
 
-COPY ./environment_p27.yml ./environment_p27.yml
-RUN conda env create -f environment_p27.yml
-RUN echo ". $CONDA_PREFIX/etc/profile.d/conda.sh" >> ~/.bash_profile
-RUN echo "conda activate mdmix-env" >> ~/.bash_profile
-WORKDIR /mnt
-SHELL ["conda", "run", "-n", "mdmix-env", "/bin/bash", "-c"]
-ENTRYPOINT ["conda", "run", "-n", "mdmix-env", "mdmix"]
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    git \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+USER $MAMBA_USER
+
+# Set working directory
+WORKDIR /opt/pymdmix
+
+# Copy project files
+COPY --chown=$MAMBA_USER:$MAMBA_USER . /opt/pymdmix/
+
+# Create conda environment with Python 3.10 and dependencies
+RUN micromamba install -y -n base -c conda-forge \
+    python=3.10 \
+    numpy \
+    scipy \
+    matplotlib \
+    netcdf4 \
+    biopython \
+    pip \
+    && micromamba clean --all --yes
+
+# Install griddataformats via pip (not available in conda-forge)
+RUN pip install --no-cache-dir griddataformats
+
+# Install pyMDMix in development mode
+RUN pip install --no-cache-dir -e .
+
+# Validate installation
+RUN python -c "import pyMDMix; print('✅ pyMDMix imported successfully')"
+
+# Set working directory for user data
+WORKDIR /data
+
+# Default command: run validation
+CMD ["python", "/opt/pymdmix/validate_installation.py"]

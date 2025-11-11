@@ -86,12 +86,51 @@ Test the program works correctly:
 	This will run a series of source code checks.
 	No test should fail.
 
-4 - Using Docker
-----------------
-Build and run from a docker container using the provided Dockerfile.
+4 - Using Docker 🐳
+-------------------
 
-- docker build -t pymdmix .
-- docker run -v $PWD:/mnt pymdmix -h
+### Quick Start with Docker
+
+**Option 1: Using docker-compose (Recommended)**
+```bash
+# Build and start container
+docker-compose up -d
+
+# Enter the container
+docker-compose exec pymdmix /bin/bash
+
+# Inside container, validate installation
+python validate_installation.py
+
+# Run pyMDMix
+python -m pyMDMix
+```
+
+**Option 2: Using Docker directly**
+```bash
+# Build the image
+docker build -t pymdmix:python3.10 .
+
+# Run validation
+docker run --rm pymdmix:python3.10
+
+# Interactive session with data volume
+docker run -it -v $PWD:/data pymdmix:python3.10 /bin/bash
+```
+
+**Option 3: Pull pre-built image (if available)**
+```bash
+docker pull username/pymdmix:python3.10
+docker run -it -v $PWD:/data username/pymdmix:python3.10
+```
+
+### Docker Image Details
+- **Base**: micromamba (fast package manager)
+- **Python**: 3.10
+- **Includes**: All scientific dependencies (numpy, scipy, matplotlib, netCDF4, biopython, griddataformats)
+- **Size**: ~800MB (optimized)
+
+See `Dockerfile` for complete build details.
 
 The docker run command will mount the current working directory (windows users should replace $PWD by %cd%) so the container has access to the current location. Output will be also in the current working directory. 
 s

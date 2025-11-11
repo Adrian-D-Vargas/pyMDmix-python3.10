@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  pymdmix:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pymdmix:python3.10
+    container_name: pymdmix
+    volumes:
+      # Mount current directory to /data in container
+      - ./:/data
+    working_dir: /data
+    # Override default command to keep container running
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - pymdmix-network
+
+networks:
+  pymdmix-network:
+    driver: bridge
