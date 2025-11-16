@@ -36,9 +36,11 @@ setup(
     author='Daniel Alvarez-Garcia',
     author_email='algarcia.daniel@gmail.com',
     url='',
-    packages=['pyMDMix','pyMDMix.Actions', 'pyMDMix.Commands'],
+    packages=['pyMDMix','pyMDMix.Actions', 'pyMDMix.Commands', 'pyMDMix.data', 'pyMDMix.data.solventlib'],
     include_package_data=True,
-    package_data={'pyMDMix.data':['pyMDMix/data/*']},
+    package_data={
+        'pyMDMix.data': ['*.*', 'defaults/*', 'solventlib/*', 'templates/*', 'test/*'],
+    },
     scripts=script_list,
     dependency_links=['https://sourcesup.renater.fr/frs/?group_id=180&release_id=2467#stable-releases-_2.8.1-title-content'],
     install_requires=getRequirements()
