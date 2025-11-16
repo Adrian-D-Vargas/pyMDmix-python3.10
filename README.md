@@ -39,16 +39,9 @@ Make sure ambertools environment variables are set
 
 2 - Installation process
 ------------------------
-it is advised to install pyMDMix in a virtual environment
+It is advised to install pyMDMix in a virtual environment
 
-there are three recommended ways to install pyMDMix:
-1. from the repository by
-`python -m pip install [insert address here]`
-
-2. from the project's local folder after cloning the repo by
-`python -m pip install .`
-
-3. Use conda or mamba: we will first create the correct conda environment which will already contain ambertools. We will then set the AMBERHOME variable within the environment and finally proceed to install pymdmix from the local git cloned files. Make sure `$CONDA_PREFIX` points to the conda installation directory (it may happen when you activate the new environment this varaible is lost, in that case change the variable for the explicit path). 
+Use conda or mamba: we will first create the correct conda environment which will already contain ambertools. We will then set the AMBERHOME variable within the environment and finally proceed to install pymdmix from the local git cloned files. Make sure `$CONDA_PREFIX` points to the conda installation directory (it may happen when you activate the new environment this varaible is lost, in that case change the variable for the explicit path). 
 
 ```bash
 git clone https://github.com/CBDD/pyMDmix.git
@@ -67,12 +60,6 @@ After installation, validate that pyMDMix works correctly:
 ```bash
 # Quick validation
 python validate_installation.py
-
-# Or test manually
-python -c "import pyMDMix; print('✅ pyMDMix imported successfully')"
-
-# Run the module
-python -m pyMDMix
 ```
 
 For comprehensive testing, see scripts in `migration_tools/` directory.
