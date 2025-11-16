@@ -62,7 +62,7 @@ class QueueInputWriter(object):
             # User directory has priority
             usertemplates = glob.glob(S.USER_MDMIX_HOME+os.sep+'*_queue_temp.txt')
             packagetemplates = glob.glob(T.templatesRoot()+os.sep+'*_queue_temp.txt')
-            qname = re.compile('(\w+)_queue_temp.txt')
+            qname = re.compile(r'(\w+)_queue_temp.txt')
             for f in usertemplates:
                 n = qname.match(osp.basename(f))
                 if n:
@@ -166,7 +166,7 @@ class QueueInputWriter(object):
 def listQueueSystems():
     usertemplates = glob.glob(S.USER_MDMIX_HOME+os.sep+'*_queue_temp.txt')
     packagetemplates = glob.glob(T.templatesRoot()+os.sep+'*_queue_temp.txt')
-    qname = re.compile('(\w+)_queue_temp.txt')
+    qname = re.compile(r'(\w+)_queue_temp.txt')
     qsys = []
     usermatches = [qname.match(osp.basename(f)) for f in usertemplates]
     [qsys.append(m.groups()[0]) for m in usermatches if m]

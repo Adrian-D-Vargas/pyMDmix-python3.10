@@ -41,13 +41,13 @@ class Command(object):
                 #Check all solvents are present in project
                 for s in selection:
                     if s not in project.solventCounter.keys():
-                        print(>>sys.stderr, "Solvent %s not in project. Skipping."%s)
+                        print("Solvent %s not in project. Skipping."%s, file=sys.stderr)
                 #Return only replicas matching solvents in selection list
                 returnlist = []
                 [returnlist.append(r) for r in project.replicas.values() if r.solvent in selection]
                 
                 if returnlist:
-                    print("Selected replica names: %s")%[r.name for r in returnlist]
+                    print("Selected replica names: %s"%[r.name for r in returnlist])
                     return returnlist
                 else:
                     raise MDMixError("Replicas not found.")
@@ -66,12 +66,12 @@ class Command(object):
             if parserargs.mode == 'group':
                 for s in selection:
                     if s not in project.listGroups():
-                        print(>> sys.stderr, "Groupname %s not in current project. Skipping..."%s)
+                        print("Groupname %s not in current project. Skipping..."%s, file=sys.stderr)
                     returnlist = []
                     [returnlist.extend(project.getGroup(s)) for s in selection if s in project.listGroups()]
                     
                     if returnlist:
-                        print("Selected replica names: %s")%[r.name for r in returnlist]
+                        print("Selected replica names: %s"%[r.name for r in returnlist])
                         return returnlist
                     else:
                         raise MDMixError("Replicas not found")

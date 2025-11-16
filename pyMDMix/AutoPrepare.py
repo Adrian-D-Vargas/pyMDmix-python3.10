@@ -188,7 +188,7 @@ class PDB2PQRInterface(object):
         "Download PQR file from results url"
         self.br.open(url)
         # Loop until 'complete' Message appears
-        match = re.compile('Message: (\w+)')
+        match = re.compile(r'Message: (\w+)')
         while tries:
             response = self.br.reload()
             
