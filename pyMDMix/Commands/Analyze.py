@@ -193,7 +193,7 @@ class Analyze(Command):
                 avg = parserargs.noavg
                 nanosel = self.parsenanos(parserargs)
 
-                from ..\1 import EnergyConversion
+                from ..Energy import EnergyConversion
                 econv = EnergyConversion()
                 econv.convert(replicas, probelist=probelist, average=avg, dg0correct=dg0,
                                     inprefix=inprefix, outprefix=outprefix, nsnaps=nsnaps, stepselection=nanosel)

@@ -68,10 +68,10 @@ class Tools(Command):
                 results = getEnergyFromTxtCoords(grid, xyz, radius=rad)
 
             if out:
-                print("Saving results to %s")%out
+                print("Saving results to %s"%out)
                 numpy.savetxt(out, results, fmt="%.3f")
             else:
-                print('\n'.join(['%.3f'%r for r in results])
+                print('\n'.join(['%.3f'%r for r in results]))
             print("DONE")
         
         elif parserargs.util_command == 'diffgrids':
