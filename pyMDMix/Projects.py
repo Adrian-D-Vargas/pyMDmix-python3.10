@@ -542,7 +542,10 @@ def returnMDMixProject(parserargs):
     try:
         p = pyMDMix.loadProject()
         return p
-    except:
+    except ProjectError:
+        # Re-raise ProjectError with detailed message from loadProject
+        raise
+    except Exception:
         return False
 
 def returnMDMixProjectOrFail(parserargs):
