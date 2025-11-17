@@ -28,7 +28,7 @@ class Command(object):
         "Function that checks and returns replicas matching args in current project."
         if parserargs.mode == 'all':
             #return all replicas in project
-            returnlist = project.replicas.values()
+            returnlist = list(project.replicas.values())
             print("Selected replica names: %s"%[r.name for r in returnlist])
             return returnlist
         elif parserargs.mode == 'bysolvent' or parserargs.mode == 'byname' or parserargs.mode == 'group':
@@ -67,14 +67,14 @@ class Command(object):
                 for s in selection:
                     if s not in project.listGroups():
                         print("Groupname %s not in current project. Skipping..."%s, file=sys.stderr)
-                    returnlist = []
-                    [returnlist.extend(project.getGroup(s)) for s in selection if s in project.listGroups()]
-                    
-                    if returnlist:
-                        print("Selected replica names: %s"%[r.name for r in returnlist])
-                        return returnlist
-                    else:
-                        raise MDMixError("Replicas not found")
+                returnlist = []
+                [returnlist.extend(project.getGroup(s)) for s in selection if s in project.listGroups()]
+                
+                if returnlist:
+                    print("Selected replica names: %s"%[r.name for r in returnlist])
+                    return returnlist
+                else:
+                    raise MDMixError("Replicas not found")
         else:
             return False
 

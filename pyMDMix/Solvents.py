@@ -199,7 +199,7 @@ class Solvent(object):
         # ADD other attributes from options file
         # can be used in specific actions later
         for key, val in kwargs.items():
-            if val: print("Adding attribute,vals: %s, %s")%(key,val)
+            if val: print("Adding attribute,vals: %s, %s"%(key,val))
             setattr(self, key, val)
 
         # Parse probesmap and typesmap

@@ -503,7 +503,7 @@ def createProject(projectConfigFile, name):
     sys = parseSystemConfigFile(projectConfigFile)
     print("Parsing md settings for replica creation...")
     sets = parseSettingsConfigFile(projectConfigFile)
-    print("Creating project %s")%name
+    print("Creating project %s"%name)
     project = Project(name=name)
     project.createProjectFolder()
     project.addNewSystems(sys)

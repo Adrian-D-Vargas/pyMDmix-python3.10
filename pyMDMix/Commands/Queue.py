@@ -17,7 +17,7 @@ class Queue(Command):
         if parserargs.action == 'list':
             q = pyMDMix.Queue.listQueueSystems()
             if q:
-                print('\nInstalled queue system templates: %s\n')%(', '.join(q))
+                print('\nInstalled queue system templates: %s\n'%(', '.join(q)))
             else:
                 print("\nNo queue templates found!\n")
         elif parserargs.action == 'write':

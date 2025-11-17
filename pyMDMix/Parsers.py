@@ -201,7 +201,7 @@ class MDSettingsConfigFileParser(object):
         for solv, nrepl in self.solv_nrepl.items():
             replInfo[solv] = {}
             for i in range(1, nrepl+1):
-                if solv in tempD and tempD[solv].has_key(i):
+                if solv in tempD and i in tempD[solv]:
                     replInfo[solv][i] = tempD[solv][i]
                 else:
                     cval = tempD.get('COMMON')

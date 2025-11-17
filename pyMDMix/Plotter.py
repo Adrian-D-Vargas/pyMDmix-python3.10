@@ -62,7 +62,7 @@ class Plot(object):
         # Construct regexps
         regexps = {}
         for prop in properties:
-            regexps[prop] = re.compile('%s\s+=\s+(-{0,1}\d+\.{0,1}\d+)'%re.escape(prop))
+            regexps[prop] = re.compile(r'%s\s+=\s+(-{0,1}\d+\.{0,1}\d+)'%re.escape(prop))
         
         # Fetch data
         rdata = {}
@@ -147,7 +147,7 @@ class Plot(object):
         import glob
         import re
 
-        digit = re.compile('(\d+)')
+        digit = re.compile(r'(\d+)')
         plotdata = {}
         for i, replica in enumerate(replicaList):
             # Check if replica is centered and fetch rmsd output files

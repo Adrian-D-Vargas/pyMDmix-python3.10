@@ -138,7 +138,7 @@ class PDB2PQRInterface(object):
             self.log.warning("Changes in webserver form.")
             if PDB2PQRInterface.MANDATORYCONTROLS < controls: return True
             else:
-                raise FormChange("Missing controls in form: "), PDB2PQRInterface.MANDATORYCONTROLS - controls            
+                raise FormChange("Missing controls in form: %s" % (PDB2PQRInterface.MANDATORYCONTROLS - controls))
         else:
             return True
 
@@ -205,7 +205,7 @@ class PDB2PQRInterface(object):
             elif status == 'running':
                 tries -= 1
                 done = False
-                print("Running... %d\r")%tries,
+                print("Running... %d\r"%tries, end='')
             else:
                 raise PDB2PQRError("Error in job execution. Check website: %s." % self.br.geturl())
         
@@ -298,7 +298,7 @@ class PQRParseFile( PDBParseFile ):
         except:
             msg = self._PDBParseFile__xplorAtomIndicesTest( source ) or ' '
             raise PDBParserError('Cannot read ' + str(source) + ' as PQR\n'\
-                           '\ERROR: ' + T.lastError() + msg)
+                           'ERROR: ' + T.lastError() + msg)
 
         model.setSource( source )
         
@@ -345,7 +345,7 @@ class PQRParseFile( PDBParseFile ):
         try:
             line, i = ('',''), 0
 
-            while line[0] <> 'END' and line[0] <> 'ENDMDL':
+            while line[0] != 'END' and line[0] != 'ENDMDL':
 
                 i += 1
                 try:

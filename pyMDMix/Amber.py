@@ -308,7 +308,7 @@ class AmberCreateSystem(object):
         self.log.debug("Neutralize ionic box unit %s, negativeres: %s, positiveres:%s"%(unit, negativeres, positiveres))
 
         # Get first residue number
-        digit = re.compile('\d+')
+        digit = re.compile(r'\d+')
         first = int(digit.search(desc[0]).group())
 
         NEGids = npy.where([negativeres in e for e in desc])[0]

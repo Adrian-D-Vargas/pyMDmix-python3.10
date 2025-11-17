@@ -24,7 +24,7 @@ class Create(Command):
             if parserargs.file:
                 if os.path.exists(parserargs.file):
                     ######### ALL correct! Proceed with MDMix Project Creation
-                    print("Creating PROJECT %s from config file: %s")%(parserargs.projname, parserargs.file)
+                    print("Creating PROJECT %s from config file: %s"%(parserargs.projname, parserargs.file))
                     p = pyMDMix.createProject(parserargs.file, parserargs.projname)
                     print("DONE")
                     #########
