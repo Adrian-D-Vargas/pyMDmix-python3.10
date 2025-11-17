@@ -1,26 +1,33 @@
-## pyMDMix --- http://mdmix.sourceforge.net
+## pyMDMix 
 
 🎉 **This version has been migrated to Python 3.10!** 🎉
 
-The program is distributed under GNU GPLv3 license. Find the license file
-under Licenses/ folder.
+The program is distributed under GNU GPLv3 license.
 
 ## 🐍 Python 3.10 Migration
 
 This repository contains pyMDMix migrated from Python 2.7 to Python 3.10.
 
-**Migration Status**: ✅ **COMPLETED** (Nov 10, 2025)
-- All syntax updated to Python 3.10
-- All imports modernized
-- Biskit dependency replaced with compatibility module
-- Full validation passed
+### Migration Details
+- **Original Version**: Python 2.7
+- **Target Version**: Python 3.10.19
+- **Migration Method**: AI-assisted migration using **Claude Sonnet 4.5** (Anthropic)
+- **GitHub Copilot**: Used as AI assistant interface in VS Code
 
-See [migration_tools/MIGRATION_SUMMARY.md](migration_tools/MIGRATION_SUMMARY.md) for details.
+### Key Changes
+- ✅ All Python 2 syntax updated to Python 3.10
+- ✅ Import system modernized (relative imports, importlib)
+- ✅ Print statements converted to functions
+- ✅ Exception handling syntax updated
+- ✅ String formatting modernized
+- ✅ Biskit dependency replaced with compatibility module
+- ✅ Cross-platform installation support (symlink issues resolved)
+- ✅ Module import errors fixed (tools, Actions, Commands)
+- ✅ Full validation and testing passed
 
-DOCUMENTATION
-=============
-All documentation on program usage is online at
-http://mdmix.sourceforge.net
+**Note**: This migration was performed with AI assistance (Claude Sonnet 4.5 via GitHub Copilot) to ensure systematic and comprehensive code modernization while maintaining original functionality.
+
+See [migration_tools/MIGRATION_SUMMARY.md](migration_tools/MIGRATION_SUMMARY.md) for detailed technical documentation.
 
 INSTALLATION
 ============
@@ -29,7 +36,7 @@ INSTALLATION
 ---------------
 This version of pyMDMix depends on:
   - **Python >= 3.10**
-  - ambertools >= 12
+  - ambertools
   - numpy, scipy, matplotlib
   - netCDF4
   - biopython
@@ -44,7 +51,7 @@ It is advised to install pyMDMix in a virtual environment
 Use conda or mamba: we will first create the correct conda environment which will already contain ambertools. We will then set the AMBERHOME variable within the environment and finally proceed to install pymdmix from the local git cloned files. Make sure `$CONDA_PREFIX` points to the conda installation directory (it may happen when you activate the new environment this varaible is lost, in that case change the variable for the explicit path). 
 
 ```bash
-git clone https://github.com/CBDD/pyMDmix.git
+git clone https://github.com/Adrian-D-Vargas/pyMDmix-python3.10.git
 cd pyMDMix
 conda env create -f environment_p27.yml
 conda activate mdmix-env
@@ -66,12 +73,6 @@ For comprehensive testing, see scripts in `migration_tools/` directory.
 
 The main script should have been installed correclty also. check it by running
 `mdmix -h`
-
-Test the program works correctly:
-	Move again to the package source directory and type:
-		> python pyMDMix/test.py all
-	This will run a series of source code checks.
-	No test should fail.
 
 4 - Using Docker 🐳
 -------------------
