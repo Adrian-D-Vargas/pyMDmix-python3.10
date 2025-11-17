@@ -516,21 +516,15 @@ def loadProject(projectfile=None):
     If projecfile path is not given, will try to load any \*.mproj file present in current folder.
     """
     if not projectfile:
-        import glob
         import os
         cwd = os.getcwd()
-        files = glob.glob('*.mproj')
+        # Use os.listdir() directly instead of glob.glob() for better compatibility
+        all_files = os.listdir('.')
+        files = [f for f in all_files if f.endswith('.mproj')]
         if not files:
-            # Debug: list what files we can see
-            all_files = os.listdir('.')
-            mproj_files = [f for f in all_files if f.endswith('.mproj')]
-            if mproj_files:
-                # Files exist but glob didn't find them, use listdir result
-                files = mproj_files
-            else:
-                raise ProjectError(f"No project file found in current folder: {cwd}. Make sure you are in a pyMDMix project folder.")
+            raise ProjectError(f"No project file found in current folder: {cwd}. Files found: {', '.join(all_files[:10])}{'...' if len(all_files) > 10 else ''}")
         if len(files) > 1:
-            raise ProjectError("More than one project file in current folder. Please remove the invald one.")
+            raise ProjectError(f"More than one project file in current folder: {', '.join(files)}. Please remove the invalid one.")
         projectfile = files[0]
     return Project(fromfile=projectfile)
 
