@@ -517,8 +517,18 @@ def loadProject(projectfile=None):
     """
     if not projectfile:
         import glob
+        import os
+        cwd = os.getcwd()
         files = glob.glob('*.mproj')
-        if not files: raise ProjectError("No project file found in current folder. Make sure you are in a pyMDMix project folder.")
+        if not files:
+            # Debug: list what files we can see
+            all_files = os.listdir('.')
+            mproj_files = [f for f in all_files if f.endswith('.mproj')]
+            if mproj_files:
+                # Files exist but glob didn't find them, use listdir result
+                files = mproj_files
+            else:
+                raise ProjectError(f"No project file found in current folder: {cwd}. Make sure you are in a pyMDMix project folder.")
         if len(files) > 1:
             raise ProjectError("More than one project file in current folder. Please remove the invald one.")
         projectfile = files[0]
