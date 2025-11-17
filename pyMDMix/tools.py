@@ -133,13 +133,33 @@ def dump(obj, filename):
 def load(filename):
     """
     Load pickled object from file.
+    Compatible with files pickled in Python 2.7 with Biskit module.
     
     @param filename: file path to load pickled object from
     @return: unpickled object
     """
     import pickle
+    import sys
+    
+    # Create a custom unpickler that redirects Biskit imports
+    class BiskitUnpickler(pickle.Unpickler):
+        def find_class(self, module, name):
+            # Redirect Biskit module imports to our compatibility module
+            if module.startswith('Biskit'):
+                from . import biskit_compat
+                # Try to get the class from biskit_compat
+                if hasattr(biskit_compat, name):
+                    return getattr(biskit_compat, name)
+                # If not found, try parent class lookup
+                try:
+                    return super().find_class(module, name)
+                except (ModuleNotFoundError, AttributeError):
+                    # Last resort: create a dummy class
+                    return type(name, (object,), {})
+            return super().find_class(module, name)
+    
     with open(filename, 'rb') as f:
-        return pickle.load(f)
+        return BiskitUnpickler(f, encoding='latin1').load()
 
 def simplifyNestedList(inlist, l=[]):
     "Return a plain list from nested list"
