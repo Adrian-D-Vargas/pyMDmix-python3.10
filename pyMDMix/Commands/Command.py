@@ -29,7 +29,7 @@ class Command(object):
         if parserargs.mode == 'all':
             #return all replicas in project
             returnlist = project.replicas.values()
-            print("Selected replica names: %s")%[r.name for r in returnlist]
+            print("Selected replica names: %s"%[r.name for r in returnlist])
             return returnlist
         elif parserargs.mode == 'bysolvent' or parserargs.mode == 'byname' or parserargs.mode == 'group':
             #Check a selection list was given
@@ -58,7 +58,7 @@ class Command(object):
                 [returnlist.append(r) for r in project.replicas.values() if r.name in selection]
 
                 if returnlist:
-                    print("Selected replica names: %s")%[r.name for r in returnlist]
+                    print("Selected replica names: %s"%[r.name for r in returnlist])
                     return returnlist
                 else:
                     raise MDMixError("Replicas not found.")
@@ -81,5 +81,5 @@ class Command(object):
     def parsenanos(self, argparser):
         if not argparser.nanoselect: return False
         nanosel = parseNumMask(argparser.nanoselect[0])
-        print("Selected steps: %s")%(', '.join(map(str, nanosel)))
+        print("Selected steps: %s"%(', '.join(map(str, nanosel))))
         return nanosel
