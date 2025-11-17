@@ -119,6 +119,28 @@ def solventsRoot(file=None):
     if file: f = osp.join(f, file)
     return f
 
+def dump(obj, filename):
+    """
+    Pickle object to file.
+    
+    @param obj: object to pickle
+    @param filename: file path to save pickled object
+    """
+    import pickle
+    with open(filename, 'wb') as f:
+        pickle.dump(obj, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+def load(filename):
+    """
+    Load pickled object from file.
+    
+    @param filename: file path to load pickled object from
+    @return: unpickled object
+    """
+    import pickle
+    with open(filename, 'rb') as f:
+        return pickle.load(f)
+
 def simplifyNestedList(inlist, l=[]):
     "Return a plain list from nested list"
     for el in inlist:
