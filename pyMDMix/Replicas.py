@@ -106,7 +106,7 @@ class Replica(object):
             self.load(fromfile)
             # Update paths if changed
             path = osp.split(osp.abspath(fromfile))[0]
-            if path != self.path: self.setPath(path)
+            if path != self.path: self.setPath(path, update=False)
             # For back compatibility
             if not hasattr(self,'iwrap'): self.iwrap=1    
         else:
