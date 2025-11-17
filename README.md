@@ -53,9 +53,9 @@ Use conda or mamba: we will first create the correct conda environment which wil
 ```bash
 git clone https://github.com/Adrian-D-Vargas/pyMDmix-python3.10.git
 cd pyMDmix-python3.10
-conda env create -f environment_p27.yml
-conda activate mdmix-env
-conda env config vars set AMBERHOME=$CONDA_PREFIX/envs/mdmix-env
+mamba env create -f environment_p27.yml
+mamba activate mdmix-env
+mamba env config vars set AMBERHOME=$CONDA_PREFIX/envs/mdmix-env
 pip install .
 ```
 
