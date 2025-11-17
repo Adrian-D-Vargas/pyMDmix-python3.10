@@ -139,3 +139,14 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Windows system files
+desktop.ini
+Thumbs.db
+*.lnk
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
