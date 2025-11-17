@@ -3,6 +3,7 @@ import pyMDMix
 from pyMDMix import MDMixError
 from pyMDMix.Commands.Command import Command
 from pyMDMix.Projects import returnMDMixProject, returnMDMixProjectOrFail
+from pyMDMix import tools
 
 class Create(Command):
     def __init__(self):
@@ -64,7 +65,7 @@ class Create(Command):
             import os
             import shutil
             # COPY PROJECT TEMPLATE
-            f = pyMDMix.tools.templatesRoot('complete.cfg')
+            f = tools.templatesRoot('complete.cfg')
             file = parserargs.file or 'complete.cfg'
             shutil.copy(f,file)
-            print("DONE. Project template saved: %s")%file
+            print("DONE. Project template saved: %s"%file)

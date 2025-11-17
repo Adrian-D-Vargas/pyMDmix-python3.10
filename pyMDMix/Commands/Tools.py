@@ -5,6 +5,7 @@ import pyMDMix
 from pyMDMix import MDMixError
 from pyMDMix.Commands.Command import Command
 from pyMDMix.Projects import returnMDMixProject, returnMDMixProjectOrFail
+from pyMDMix import tools
 class Tools(Command):
     def __init__(self):
         self.cmdstring = "tools"
@@ -116,7 +117,7 @@ class Tools(Command):
         elif parserargs.util_command == 'projecttemplate':
             import shutil
             fname = parserargs.filename
-            shutil.copy(pyMDMix.tools.templatesRoot('project.cfg'), fname)
+            shutil.copy(tools.templatesRoot('project.cfg'), fname)
 
         elif parserargs.util_command == 'extendsim':
             # EXTEND SIMULATIONS

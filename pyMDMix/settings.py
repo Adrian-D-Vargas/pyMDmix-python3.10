@@ -191,7 +191,7 @@ def setLogger(level=None, logFile=None):
     "Build root logger"
     import sys
     import logging
-    from tools import LogFormatter
+    from .tools import LogFormatter
 
     if not level: level = 'INFO'
     if level.upper() not in LOGLEVEL.keys():
